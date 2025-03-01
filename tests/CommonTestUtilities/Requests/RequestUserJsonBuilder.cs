@@ -5,7 +5,7 @@ namespace CommonTestUtilities.Requests
 {
     public class RequestUserJsonBuilder
     {
-        public static RequestRegisterUserJson MakeRequest(int passwordLenght = 10)
+        public static RequestRegisterUserJson Build(int passwordLenght = 10)
         {
             string provider = "gmail.com";
             return new Faker<RequestRegisterUserJson>()

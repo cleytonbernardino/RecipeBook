@@ -18,7 +18,7 @@ namespace WebApi.Test.User.Register
         [Fact]
         public async Task Success()
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
             HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
 
@@ -38,7 +38,7 @@ namespace WebApi.Test.User.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Name_Empty_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Name = "";
 
             if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
@@ -66,7 +66,7 @@ namespace WebApi.Test.User.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Email_Empty_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Email = "";
 
             if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
@@ -94,7 +94,7 @@ namespace WebApi.Test.User.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Email_Already_Exists_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
             if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
@@ -122,7 +122,7 @@ namespace WebApi.Test.User.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Password_Lenght_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Password = "123";
 
             if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))

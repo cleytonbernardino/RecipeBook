@@ -10,7 +10,7 @@ namespace Validators.Test.User.Register
         [Fact]
         public void Succes()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
             RegisterUserValidator validator = new();
             bool result = validator.Validate(request).IsValid;
@@ -21,7 +21,7 @@ namespace Validators.Test.User.Register
         [Fact]
         public void Erro_Name_Empty()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Name = "";
 
             RegisterUserValidator validator = new();
@@ -35,7 +35,7 @@ namespace Validators.Test.User.Register
         [Fact]
         public void Erro_Email_Empty()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Email = "";
 
             RegisterUserValidator validator = new();
@@ -49,7 +49,7 @@ namespace Validators.Test.User.Register
         [Fact]
         public void Erro_Email_Invalid()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Email = "email.com";
 
             RegisterUserValidator validator = new();
@@ -69,7 +69,7 @@ namespace Validators.Test.User.Register
         [InlineData(5)]
         public void Erro_Password_Lenght_Invalid(int passwordLenght)
         {
-            RequestRegisterUserJson request = MakeRequest(passwordLenght);
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build(passwordLenght);
 
             RegisterUserValidator validator = new();
             var result = validator.Validate(request);

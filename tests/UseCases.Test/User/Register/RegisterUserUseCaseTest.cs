@@ -9,12 +9,12 @@ using RecipeBook.Exceptions.ExceptionsBase;
 
 namespace UseCases.Test.User.Register
 {
-    public class RegisterUserUseCaseTest : RequestUserJsonBuilder
+    public class RegisterUserUseCaseTest
     {
         [Fact]
         public async Task Success()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
             RegisterUserUseCase useCase = CreateUseCase();
             var result = await useCase.Execute(request);
@@ -26,7 +26,7 @@ namespace UseCases.Test.User.Register
         [Fact]
         public async Task Erro_Email_Already_Registered()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             
             RegisterUserUseCase useCase = CreateUseCase(request.Email);
 
@@ -40,7 +40,7 @@ namespace UseCases.Test.User.Register
         [Fact]
         public async Task Error_Name_Empty()
         {
-            RequestRegisterUserJson request = MakeRequest();
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Name = "";
 
             RegisterUserUseCase useCase = CreateUseCase();

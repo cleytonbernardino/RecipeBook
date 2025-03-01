@@ -15,8 +15,11 @@ namespace RecipeBook.Infrastructure
     {
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            AddDbContext(services, configuration);
             AddRepositories(services);
+            if (configuration.IsUnitTestEnviroment())
+                return;
+
+            AddDbContext(services, configuration);
             AddFluentMigrator(services, configuration);
         }
 

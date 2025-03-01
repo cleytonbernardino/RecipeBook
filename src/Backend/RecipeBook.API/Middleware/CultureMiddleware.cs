@@ -18,7 +18,7 @@ namespace RecipeBook.API.Middleware
 
             string? requestCulture = context.Request.Headers.AcceptLanguage.FirstOrDefault();
 
-            if (string.IsNullOrWhiteSpace(requestCulture) == false && supportedLanguages.Any(c => c.Name == requestCulture))
+            if (!string.IsNullOrWhiteSpace(requestCulture) && supportedLanguages.Any(c => c.Name == requestCulture))
             {
                 cultureInfo = new CultureInfo(requestCulture);
             }

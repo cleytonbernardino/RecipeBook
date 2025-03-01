@@ -18,7 +18,7 @@ namespace RecipeBook.Application.Cryptography
             return StringBytes(hashBytes);
         }
 
-        private string StringBytes(byte[] bytes)
+        private static string StringBytes(byte[] bytes)
         {
             StringBuilder sb = new();
             foreach (Byte b in bytes)

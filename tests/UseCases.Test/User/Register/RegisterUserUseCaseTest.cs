@@ -52,7 +52,7 @@ namespace UseCases.Test.User.Register
             Assert.Equal(exception.ErrorMessagens[0], ResourceMessagesException.NAME_EMPTY);
         }
 
-        private RegisterUserUseCase CreateUseCase(string? email = null)
+        private static RegisterUserUseCase CreateUseCase(string? email = null)
         {
             var readRepositoryBuild = new UserReadOnlyRepositoryBuilder();
             var writeRepository = UserWriteOnlyRepositoryBuilder.Build();

@@ -6,6 +6,5 @@ namespace RecipeBook.Application.UserCases.User.Register
     public interface IRegisterUserUseCase
     {
         public Task<ResponseResgisteredUserJson> Execute(RequestRegisterUserJson request);
-        //public void Validate(RequestRegisterUserJson request);
     }
 }

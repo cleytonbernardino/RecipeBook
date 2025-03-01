@@ -1,8 +1,11 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Communiction.Requests;
+using RecipeBook.Exceptions;
+using System.Globalization;
 using System.Net;
 using System.Net.Http.Json;
 using System.Text.Json;
+using WebApi.Test.InlineData;
 
 namespace WebApi.Test.User.Register
 {
@@ -28,6 +31,119 @@ namespace WebApi.Test.User.Register
             string? name = responseData.RootElement.GetProperty("name").GetString();
 
             Assert.Equal(request.Name, name);
+        }
+
+
+        [Theory]
+        [ClassData(typeof(CultureInlineDataTest))]
+        public async Task Erro_Name_Empty_Is_Returning_Correct_Error(string culture)
+        {
+            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            request.Name = "";
+
+            if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+            _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
+
+            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
+
+            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
+
+            Assert.Equal(1, jsonData.GetArrayLength());
+
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("NAME_EMPTY", new CultureInfo(culture))!;
+
+            Assert.Equal(expectedMessage, jsonData[0].GetString());
+        }
+
+        [Theory]
+        [ClassData(typeof(CultureInlineDataTest))]
+        public async Task Erro_Email_Empty_Is_Returning_Correct_Error(string culture)
+        {
+            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            request.Email = "";
+
+            if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+            _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
+
+            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
+
+            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
+
+            Assert.Equal(1, jsonData.GetArrayLength());
+
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_EMPTY", new CultureInfo(culture))!;
+
+            Assert.Equal(expectedMessage, jsonData[0].GetString());
+        }
+
+        [Theory]
+        [ClassData(typeof(CultureInlineDataTest))]
+        public async Task Erro_Email_Already_Exists_Is_Returning_Correct_Error(string culture)
+        {
+            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+
+            if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+            _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+            await _httpClient.PostAsJsonAsync("User", request);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
+
+            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
+
+            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
+
+            Assert.Equal(1, jsonData.GetArrayLength());
+
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_IN_USE", new CultureInfo(culture))!;
+
+            Assert.Equal(expectedMessage, jsonData[0].GetString());
+        }
+
+        [Theory]
+        [ClassData(typeof(CultureInlineDataTest))]
+        public async Task Erro_Password_Lenght_Is_Returning_Correct_Error(string culture)
+        {
+            RequestRegisterUserJson request = RequestUserJsonBuilder.MakeRequest();
+            request.Password = "123";
+
+            if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+            _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
+
+            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
+
+            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
+
+            Assert.Equal(1, jsonData.GetArrayLength());
+
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_LENGTH_INVALID", new CultureInfo(culture))!;
+
+            Assert.Equal(expectedMessage, jsonData[0].GetString());
         }
     }
 }

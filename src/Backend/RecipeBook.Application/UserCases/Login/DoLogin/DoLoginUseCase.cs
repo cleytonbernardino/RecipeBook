@@ -31,7 +31,7 @@ namespace RecipeBook.Application.UserCases.Login.DoLogin
             };
         }
 
-        public void Validator(RequestLoginJson request)
+        private void Validator(RequestLoginJson request)
         {
             DoLoginUserValidator validator = new();
             var result = validator.Validate(request);

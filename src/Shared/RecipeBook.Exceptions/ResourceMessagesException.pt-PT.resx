@@ -126,8 +126,14 @@
   <data name="EMAIL_IN_USE" xml:space="preserve">
     <value>O Email já foi registado</value>
   </data>
+  <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
+    <value>Email ou password inválido.</value>
+  </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>Nome não pode está vazio.</value>
+  </data>
+  <data name="PASSWORD_EMPTY" xml:space="preserve">
+    <value>A palavra-passe não pode está em branco.</value>
   </data>
   <data name="PASSWORD_LENGTH_INVALID" xml:space="preserve">
     <value>A palavra-passe deve ter pelo menos 6 caracteres.</value>

@@ -11,6 +11,8 @@ namespace WebApi.Test.User.Register
 {
     public class RegisterUserTest : IClassFixture<CustomWebApplicationFactory>
     {
+        private readonly string _method = "user";
+
         private readonly HttpClient _httpClient;
 
         public RegisterUserTest(CustomWebApplicationFactory factory) => _httpClient = factory.CreateClient();
@@ -20,7 +22,7 @@ namespace WebApi.Test.User.Register
         {
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_method, request);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
@@ -45,7 +47,7 @@ namespace WebApi.Test.User.Register
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
             _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_method, request);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -67,13 +69,41 @@ namespace WebApi.Test.User.Register
         public async Task Erro_Email_Empty_Is_Returning_Correct_Error(string culture)
         {
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
-            request.Email = "";
+            request.Email = string.Empty;
 
             if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
             _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_method, request);
+
+            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+            await using var responseBody = await response.Content.ReadAsStreamAsync();
+
+            var responseData = await JsonDocument.ParseAsync(responseBody);
+
+            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
+
+            Assert.Equal(1, jsonData.GetArrayLength());
+
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_EMPTY", new CultureInfo(culture))!;
+
+            Assert.Equal(expectedMessage, jsonData[0].GetString());
+        }
+
+        [Theory]
+        [ClassData(typeof(CultureInlineDataTest))]
+        public async Task Erro_Email_Invalid_Is_Returning_Correct_Error(string culture)
+        {
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            request.Email = "email.com";
+
+            if (_httpClient.DefaultRequestHeaders.Contains("Accept-Language"))
+                _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
+            _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
+
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_method, request);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -85,7 +115,7 @@ namespace WebApi.Test.User.Register
 
             Assert.Equal(1, jsonData.GetArrayLength());
 
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_EMPTY", new CultureInfo(culture))!;
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_INVALID", new CultureInfo(culture))!;
 
             Assert.Equal(expectedMessage, jsonData[0].GetString());
         }
@@ -100,8 +130,8 @@ namespace WebApi.Test.User.Register
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
             _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
 
-            await _httpClient.PostAsJsonAsync("User", request);
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+            await _httpClient.PostAsJsonAsync(_method, request);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_method, request);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -129,7 +159,7 @@ namespace WebApi.Test.User.Register
                 _httpClient.DefaultRequestHeaders.Remove("Accept-Language");
             _httpClient.DefaultRequestHeaders.Add("Accept-Language", culture);
 
-            HttpResponseMessage response = await _httpClient.PostAsJsonAsync("User", request);
+            HttpResponseMessage response = await _httpClient.PostAsJsonAsync(_method, request);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 

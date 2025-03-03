@@ -1,0 +1,25 @@
+﻿using Bogus;
+using CommonTestUtilities.Cryptography;
+using RecipeBook.Application.Cryptography;
+using RecipeBook.Domain.Entities;
+
+namespace CommonTestUtilities.Entities
+{
+    public class UserBuilder
+    {
+        public static (User user, string password) Build()
+        {
+            PasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
+            string password = new Faker().Internet.Password();
+            string encriptyPassword = passwordEncripter.Encript(password);
+
+            var user = new Faker<User>()
+                .RuleFor(user => user.ID, () => 1)
+                .RuleFor(user => user.Name, (f) => f.Person.FullName)
+                .RuleFor(user => user.Email, (f) => f.Person.Email)
+                .RuleFor(user => user.Password, (f) => encriptyPassword);
+
+            return (user, password);
+        }
+    }
+}

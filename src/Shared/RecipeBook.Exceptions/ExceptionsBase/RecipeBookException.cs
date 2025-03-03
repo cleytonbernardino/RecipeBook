@@ -2,5 +2,6 @@
 {
     public class RecipeBookException : SystemException
     {
+        public RecipeBookException(string message) : base(message) { }
     }
 }

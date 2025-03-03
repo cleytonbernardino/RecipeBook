@@ -5,7 +5,7 @@ using RecipeBook.Exceptions;
 
 namespace Validators.Test.User.Register
 {
-    public class RegisterUserValidatorTest : RequestUserJsonBuilder
+    public class RegisterUserValidatorTest
     {
         [Fact]
         public void Succes()

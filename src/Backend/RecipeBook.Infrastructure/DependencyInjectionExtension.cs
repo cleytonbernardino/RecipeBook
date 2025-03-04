@@ -61,7 +61,7 @@ namespace RecipeBook.Infrastructure
             string signingKey = configuration.GetSection("Settings:JWT:SigningKey").Value!;
 
             services.AddScoped<IAccessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, signingKey));
-            services.AddScoped<IAccessTokenValidator>(option => new JwtTokenValidator(signingKey));
+            services.AddScoped<IAccessTokenValidator>(option => new JwtTokenValidator(expirationTimeMinutes, signingKey));
         }
     }
 }

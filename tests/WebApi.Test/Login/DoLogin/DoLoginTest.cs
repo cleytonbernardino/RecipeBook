@@ -1,27 +1,41 @@
 ﻿using CommonTestUtilities.Requests;
+using Microsoft.AspNetCore.Http;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
-using System.Net;
+using System.Net.Http.Json;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
-namespace WebApi.Test.User.Register
+namespace WebApi.Test.Login.DoLogin
 {
-    public class RegisterUserTest : RecipeBookClassFixture
+    public class DoLoginTest : RecipeBookClassFixture
     {
-        private readonly string _method = "user";
+        private readonly string _method = "login";
 
-        public RegisterUserTest(CustomWebApplicationFactory factory) : base(factory) { }
+        private readonly string _email;
+        private readonly string _password;
+        private readonly string _name;
+
+        public DoLoginTest(CustomWebApplicationFactory factory) : base(factory)
+        {
+            _email = factory.GetEmail();
+            _password = factory.GetPassword();
+            _name = factory.GetName();
+        }
 
         [Fact]
         public async Task Success()
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            RequestLoginJson request = new()
+            {
+                Email = _email,
+                Password = _password
+            };
 
             HttpResponseMessage response = await DoPost(_method, request);
 
-            Assert.Equal(HttpStatusCode.Created, response.StatusCode);
+            Assert.Equal(StatusCodes.Status200OK, (int)response.StatusCode);
 
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();
 
@@ -29,20 +43,18 @@ namespace WebApi.Test.User.Register
 
             string? name = responseData.RootElement.GetProperty("name").GetString();
 
-            Assert.Equal(request.Name, name);
+            Assert.Equal(_name, name);
         }
-
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
-        public async Task Erro_Name_Empty_Is_Returning_Correct_Error(string culture)
+        public async Task Error_Invalid_Login(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
-            request.Name = "";
+            RequestLoginJson request = RequestLoginJsonBuilder.Build();
 
             HttpResponseMessage response = await DoPost(_method, request, culture);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();
 
@@ -52,7 +64,7 @@ namespace WebApi.Test.User.Register
 
             Assert.Equal(1, jsonData.GetArrayLength());
 
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("NAME_EMPTY", new CultureInfo(culture))!;
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_OR_PASSWORD_INVALID", new CultureInfo(culture))!;
 
             Assert.Equal(expectedMessage, jsonData[0].GetString());
         }
@@ -61,16 +73,16 @@ namespace WebApi.Test.User.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Email_Empty_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
-            request.Email = string.Empty;
+            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            request.Email = "";
 
             HttpResponseMessage response = await DoPost(_method, request, culture);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
 
-            await using var responseBody = await response.Content.ReadAsStreamAsync();
+            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
 
-            var responseData = await JsonDocument.ParseAsync(responseBody);
+            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
 
             JsonElement jsonData = responseData.RootElement.GetProperty("errors");
 
@@ -85,12 +97,12 @@ namespace WebApi.Test.User.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Email_Invalid_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            RequestLoginJson request = RequestLoginJsonBuilder.Build();
             request.Email = "email.com";
 
             HttpResponseMessage response = await DoPost(_method, request, culture);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
 
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();
 
@@ -107,14 +119,14 @@ namespace WebApi.Test.User.Register
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
-        public async Task Erro_Email_Already_Exists_Is_Returning_Correct_Error(string culture)
+        public async Task Erro_Password_Empty_Is_Returning_Correct_Error(string culture)
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            request.Password = "";
 
-            await DoPost(_method, request);
             HttpResponseMessage response = await DoPost(_method, request, culture);
 
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
 
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();
 
@@ -124,31 +136,7 @@ namespace WebApi.Test.User.Register
 
             Assert.Equal(1, jsonData.GetArrayLength());
 
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_IN_USE", new CultureInfo(culture))!;
-
-            Assert.Equal(expectedMessage, jsonData[0].GetString());
-        }
-
-        [Theory]
-        [ClassData(typeof(CultureInlineDataTest))]
-        public async Task Erro_Password_Lenght_Is_Returning_Correct_Error(string culture)
-        {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
-            request.Password = "123";
-
-            HttpResponseMessage response = await DoPost(_method, request, culture);
-
-            Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
-
-            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
-
-            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
-
-            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
-
-            Assert.Equal(1, jsonData.GetArrayLength());
-
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_LENGTH_INVALID", new CultureInfo(culture))!;
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_EMPTY", new CultureInfo(culture))!;
 
             Assert.Equal(expectedMessage, jsonData[0].GetString());
         }

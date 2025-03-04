@@ -14,7 +14,7 @@ namespace RecipeBook.API.Token
         public string Value()
         {
             string authorization = _httpContextAccessor.HttpContext!.Request.Headers.Authorization.ToString();
-            return authorization["Bearer".Length..];
+            return authorization["Bearer ".Length..];
         }
     }
 }

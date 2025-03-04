@@ -5,11 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.Tokens;
+using RecipeBook.Domain.Services.LoggedUser;
 using RecipeBook.Infrastructure.DataAccess;
 using RecipeBook.Infrastructure.DataAccess.Repositories;
 using RecipeBook.Infrastructure.Extensions;
 using RecipeBook.Infrastructure.Security.Tokens.Access.Generator;
 using RecipeBook.Infrastructure.Security.Tokens.Access.Validator;
+using RecipeBook.Infrastructure.Services.LoggedUser;
 using System.Reflection;
 
 namespace RecipeBook.Infrastructure
@@ -20,6 +22,7 @@ namespace RecipeBook.Infrastructure
         {
             AddRepositories(services);
             AddJwtTokens(services, configuration);
+            AddLoggedUser(services);
             if (configuration.IsUnitTestEnviroment())
                 return;
 
@@ -63,5 +66,7 @@ namespace RecipeBook.Infrastructure
             services.AddScoped<IAccessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, signingKey));
             services.AddScoped<IAccessTokenValidator>(option => new JwtTokenValidator(expirationTimeMinutes, signingKey));
         }
+
+        private static void AddLoggedUser(IServiceCollection services) => services.AddScoped<ILoggedUser, LoggedUser>();
     }
 }

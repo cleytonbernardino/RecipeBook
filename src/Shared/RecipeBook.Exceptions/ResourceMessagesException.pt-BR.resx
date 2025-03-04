@@ -129,8 +129,14 @@
   <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
     <value>Email ou senha inválido.</value>
   </data>
+  <data name="EXPIRED_TOKEN" xml:space="preserve">
+    <value>Token expirado.</value>
+  </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>Nome não pode está vazio.</value>
+  </data>
+  <data name="NO_TOKEN" xml:space="preserve">
+    <value>Nenhum token foi encontrado na requisição.</value>
   </data>
   <data name="PASSWORD_EMPTY" xml:space="preserve">
     <value>A senha não pode está em branco.</value>
@@ -140,5 +146,8 @@
   </data>
   <data name="UNKNOWN_ERROR" xml:space="preserve">
     <value>Erro desconhecido</value>
+  </data>
+  <data name="USER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
+    <value>Usuario não tem permissão para acessar esse recurso.</value>
   </data>
 </root>

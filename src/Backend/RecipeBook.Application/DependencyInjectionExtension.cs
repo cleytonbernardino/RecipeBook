@@ -29,7 +29,7 @@ namespace RecipeBook.Application
         {
             services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
             services.AddScoped<IDoLoginUseCase, DoLoginUseCase>();
-            services.AddScoped<IGetUserProfile, GetUserProfile>();
+            services.AddScoped<IGetUserProfile, GetUserProfileUseCase>();
         }
 
         private static void AddPasswordEncrypter(IServiceCollection services, IConfiguration configuration)

@@ -4,12 +4,12 @@ using RecipeBook.Domain.Services.LoggedUser;
 
 namespace RecipeBook.Application.UserCases.User.Profile
 {
-    public class GetUserProfile : IGetUserProfile
+    public class GetUserProfileUseCase : IGetUserProfile
     {
         private readonly ILoggedUser _loggedUser;
         private readonly IMapper _mapper;
 
-        public GetUserProfile(ILoggedUser loggedUser, IMapper mapper)
+        public GetUserProfileUseCase(ILoggedUser loggedUser, IMapper mapper)
         {
             _loggedUser = loggedUser;
             _mapper = mapper;

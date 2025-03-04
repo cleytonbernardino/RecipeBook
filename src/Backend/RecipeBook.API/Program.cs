@@ -43,7 +43,7 @@ app.MapControllers();
 
 MigrationDatabase();
 
-app.Run();
+await app.RunAsync();
 
 void MigrationDatabase()
 {

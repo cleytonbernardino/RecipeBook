@@ -4,9 +4,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
+using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Infrastructure.DataAccess;
 using RecipeBook.Infrastructure.DataAccess.Repositories;
 using RecipeBook.Infrastructure.Extensions;
+using RecipeBook.Infrastructure.Security.Tokens.Access.Generator;
 using System.Reflection;
 
 namespace RecipeBook.Infrastructure
@@ -16,6 +18,7 @@ namespace RecipeBook.Infrastructure
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             AddRepositories(services);
+            AddJwtTokens(services, configuration);
             if (configuration.IsUnitTestEnviroment())
                 return;
 
@@ -49,6 +52,14 @@ namespace RecipeBook.Infrastructure
                 .WithGlobalConnectionString(connectionString)
                 .ScanIn(Assembly.Load("RecipeBook.Infrastructure")).For.All()
             );
+        }
+
+        private static void AddJwtTokens(IServiceCollection services, IConfiguration configuration)
+        {
+            uint expirationTimeMinutes = uint.Parse(configuration.GetSection("Settings:JWT:ExpirationTimeMinutes").Value!);
+            string SigningKey = configuration.GetSection("Settings:JWT:SigningKey").Value!;
+
+            services.AddScoped<IAccessTokenGenerator>(option => new JwtTokenGenerator(expirationTimeMinutes, SigningKey));
         }
     }
 }

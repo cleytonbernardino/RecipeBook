@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Http;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
-using System.Net.Http.Json;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
@@ -29,7 +28,7 @@ namespace WebApi.Test.Login.DoLogin
         {
             RequestLoginJson request = new()
             {
-                Email = _email,
+                Email = _email, 
                 Password = _password
             };
 
@@ -43,7 +42,16 @@ namespace WebApi.Test.Login.DoLogin
 
             string? name = responseData.RootElement.GetProperty("name").GetString();
 
+            string? accessToken = responseData.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString();
+
+            // Name
+            Assert.NotNull(name);
+            Assert.NotEmpty(name);
             Assert.Equal(_name, name);
+
+            // Tokens
+            Assert.NotNull(accessToken);
+            Assert.NotEmpty(accessToken);
         }
 
         [Theory]

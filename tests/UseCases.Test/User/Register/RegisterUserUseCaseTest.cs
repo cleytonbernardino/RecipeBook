@@ -2,6 +2,7 @@
 using CommonTestUtilities.Mapper;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
+using CommonTestUtilities.Tokens;
 using RecipeBook.Application.UserCases.User.Register;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Exceptions;
@@ -20,6 +21,8 @@ namespace UseCases.Test.User.Register
             var result = await useCase.Execute(request);
 
             Assert.NotNull(result);
+            Assert.NotNull(result.Tokens);
+            Assert.NotEmpty(result.Tokens.AccessToken);
             Assert.Equal(result.Name, request.Name);
         }
 
@@ -57,13 +60,14 @@ namespace UseCases.Test.User.Register
             var readRepositoryBuild = new UserReadOnlyRepositoryBuilder();
             var writeRepository = UserWriteOnlyRepositoryBuilder.Build();
             var unitOfWork = UnitOfWork.Build();
-            var passwordEncripter = PasswordEncripterBuilder.Build();
             var mapper = MapperBuilder.Build();
+            var accessToken = JwtTokenGeneratorBuilder.Build();
+            var passwordEncripter = PasswordEncripterBuilder.Build();
 
             if (!string.IsNullOrEmpty(email))
                 readRepositoryBuild.ExistActiveUserWithEmail(email);
 
-            return new RegisterUserUseCase(readRepositoryBuild.Build(), writeRepository, unitOfWork, passwordEncripter, mapper);
+            return new RegisterUserUseCase(readRepositoryBuild.Build(), writeRepository, unitOfWork, mapper, accessToken, passwordEncripter);
         }
     }
 }

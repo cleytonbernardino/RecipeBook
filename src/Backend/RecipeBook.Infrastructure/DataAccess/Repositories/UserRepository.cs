@@ -25,11 +25,20 @@ namespace RecipeBook.Infrastructure.DataAccess.Repositories
                 );
         }
 
+        public async Task<User> GetById(long id)
+        {
+            return await _dbContext.Users.FirstAsync(
+                user => user.ID.Equals(id) && user.Active
+            );
+        }
+
         public async Task<bool> ExistActiveUserWithIndentifier(Guid indentifier)
         {
             return await _dbContext.Users.AnyAsync(
                     user => user.UserIdentifier.Equals(indentifier) && user.Active
                 );
         }
+
+        public void Update(User user) => _dbContext.Users.Update(user);
     }
 }

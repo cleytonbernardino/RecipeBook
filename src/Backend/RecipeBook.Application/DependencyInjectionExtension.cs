@@ -5,6 +5,7 @@ using RecipeBook.Application.Services.AutoMapper;
 using RecipeBook.Application.UserCases.Login.DoLogin;
 using RecipeBook.Application.UserCases.User.Profile;
 using RecipeBook.Application.UserCases.User.Register;
+using RecipeBook.Application.UserCases.User.Update;
 
 namespace RecipeBook.Application
 {
@@ -30,6 +31,7 @@ namespace RecipeBook.Application
             services.AddScoped<IRegisterUserUseCase, RegisterUserUseCase>();
             services.AddScoped<IDoLoginUseCase, DoLoginUseCase>();
             services.AddScoped<IGetUserProfile, GetUserProfileUseCase>();
+            services.AddScoped<IUpdateUserProfile, UpdateUserProfile>();
         }
 
         private static void AddPasswordEncrypter(IServiceCollection services, IConfiguration configuration)

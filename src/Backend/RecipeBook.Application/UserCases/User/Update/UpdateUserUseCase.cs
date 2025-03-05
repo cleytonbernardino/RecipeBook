@@ -7,14 +7,14 @@ using RecipeBook.Exceptions.ExceptionsBase;
 
 namespace RecipeBook.Application.UserCases.User.Update
 {
-    public class UpdateUserProfile : IUpdateUserProfile
+    public class UpdateUserUseCase : IUpdateUserUseCase
     {
         private readonly ILoggedUser _loggedUser;
         private readonly IUserReadOnlyRepository _userReadOnlyRepository;
         private readonly IUserWriteOnlyRepository _userWriteOnlyRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateUserProfile(
+        public UpdateUserUseCase(
             ILoggedUser loggedUser,
             IUserReadOnlyRepository userReadOnlyRepository,
             IUserWriteOnlyRepository userWriteOnlyRepository,
@@ -44,7 +44,7 @@ namespace RecipeBook.Application.UserCases.User.Update
 
         public async Task Validate(RequestUpdateUserJson request, string currentEmail)
         {
-            UpdateUserProfileValidator validator = new();
+            UpdateUserValidator validator = new();
             var result = validator.Validate(request);
 
             if (!currentEmail.Equals(request.Email))

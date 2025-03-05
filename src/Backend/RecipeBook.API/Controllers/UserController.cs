@@ -36,7 +36,7 @@ namespace RecipeBook.API.Controllers
         [AuthenticatedUser]
         public async Task<IActionResult> UpdateProfile(
             [FromBody]     RequestUpdateUserJson request,
-            [FromServices] IUpdateUserProfile    useCase
+            [FromServices] IUpdateUserUseCase    useCase
         )
         {
             await useCase.Execute(request);

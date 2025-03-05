@@ -2,7 +2,7 @@
 
 namespace RecipeBook.Application.UserCases.User.Update
 {
-    public interface IUpdateUserProfile
+    public interface IUpdateUserUseCase
     {
         public Task Execute(RequestUpdateUserJson request);
     }

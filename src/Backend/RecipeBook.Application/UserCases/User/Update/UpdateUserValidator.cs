@@ -4,9 +4,9 @@ using RecipeBook.Exceptions;
 
 namespace RecipeBook.Application.UserCases.User.Update
 {
-    public class UpdateUserProfileValidator : AbstractValidator<RequestUpdateUserJson>
+    public class UpdateUserValidator : AbstractValidator<RequestUpdateUserJson>
     {
-        public UpdateUserProfileValidator()
+        public UpdateUserValidator()
         {
             RuleFor(user => user.Name).NotEmpty().WithMessage(ResourceMessagesException.NAME_EMPTY);
             RuleFor(user => user.Email).NotEmpty().WithMessage(ResourceMessagesException.EMAIL_EMPTY);

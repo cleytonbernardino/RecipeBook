@@ -2,6 +2,6 @@
 {
     public interface IAccessTokenGenerator
     {
-        public string Generate(Guid userIdentifier, bool expired = false);
+        public string Generate(Guid userIdentifier);
     }
 }

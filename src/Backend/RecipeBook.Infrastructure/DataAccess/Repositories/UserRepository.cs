@@ -4,7 +4,7 @@ using RecipeBook.Domain.Repositories.User;
 
 namespace RecipeBook.Infrastructure.DataAccess.Repositories
 {
-    public class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepository
+    public class UserRepository : IUserReadOnlyRepository, IUserWriteOnlyRepository, IUserUpdateOnlyRepository
     {
         private readonly RecipeBookDbContext _dbContext;
 

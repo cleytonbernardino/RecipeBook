@@ -23,7 +23,7 @@ namespace WebApi.Test
             return await _httpClient.GetAsync(method);
         }
 
-        protected async Task<JsonElement> GetJsonElementAsync(HttpResponseMessage response)
+        protected static async Task<JsonElement> GetJsonElementAsync(HttpResponseMessage response)
         {
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();
             JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);

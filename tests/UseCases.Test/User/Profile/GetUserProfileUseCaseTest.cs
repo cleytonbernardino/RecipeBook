@@ -22,7 +22,7 @@ namespace UseCases.Test.User.Profile
             Assert.Equal(user.Email, result.Email);
         }
 
-        private GetUserProfileUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)
+        private static GetUserProfileUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)
         {
             var mapper = MapperBuilder.Build();
             var logged = LoggedUserBuilder.Build(user);

@@ -2,13 +2,14 @@
 using CommonTestUtilities.Entities;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
+using CommonTestUtilities.Tokens;
 using RecipeBook.Application.Cryptography;
 using RecipeBook.Application.UserCases.Login.DoLogin;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Communiction.Responses;
+using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
-using System.Net;
 
 namespace UseCases.Test.Login.DoLogin
 {
@@ -28,6 +29,8 @@ namespace UseCases.Test.Login.DoLogin
             });
 
             Assert.NotNull(result);
+            Assert.NotNull(result.Tokens);
+            Assert.NotEmpty(result.Tokens.AccessToken);
             Assert.Equal(user.Name, result.Name);
         }
 
@@ -48,11 +51,12 @@ namespace UseCases.Test.Login.DoLogin
         {
             PasswordEncripter passwordEncripty = PasswordEncripterBuilder.Build();
             UserReadOnlyRepositoryBuilder readOnlyRepository = new();
+            IAccessTokenGenerator accessToken = JwtTokenGeneratorBuilder.Build();
 
             if (user is not null)
                 readOnlyRepository.GetByEmailAndPassword(user);
 
-            return new DoLoginUseCase(readOnlyRepository.Build(), passwordEncripty);
+            return new DoLoginUseCase(readOnlyRepository.Build(), accessToken, passwordEncripty);
         }
     }
 }

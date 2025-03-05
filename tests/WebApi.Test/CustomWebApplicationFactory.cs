@@ -18,6 +18,8 @@ namespace WebApi.Test
 
         public string GetName() => _user.Name;
 
+        public Guid GetUserIndentifier() => _user.UserIdentifier;
+
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
             builder.UseEnvironment("Test")

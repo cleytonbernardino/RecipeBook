@@ -24,5 +24,12 @@ namespace RecipeBook.Infrastructure.DataAccess.Repositories
                     user => user.Email.Equals(email) && user.Password.Equals(password) && user.Active
                 );
         }
+
+        public async Task<bool> ExistActiveUserWithIndentifier(Guid indentifier)
+        {
+            return await _dbContext.Users.AnyAsync(
+                    user => user.UserIdentifier.Equals(indentifier) && user.Active
+                );
+        }
     }
 }

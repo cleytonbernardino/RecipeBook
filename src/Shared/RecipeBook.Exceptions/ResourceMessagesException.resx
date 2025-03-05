@@ -129,8 +129,14 @@
   <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
     <value>Invalid email or password.</value>
   </data>
+  <data name="EXPIRED_TOKEN" xml:space="preserve">
+    <value>Expired token.</value>
+  </data>
   <data name="NAME_EMPTY" xml:space="preserve">
     <value>Name cannot be empty.</value>
+  </data>
+  <data name="NO_TOKEN" xml:space="preserve">
+    <value>No token was found in the request.</value>
   </data>
   <data name="PASSWORD_EMPTY" xml:space="preserve">
     <value>Password cannot be blank.</value>
@@ -140,5 +146,8 @@
   </data>
   <data name="UNKNOWN_ERROR" xml:space="preserve">
     <value>Unknown error</value>
+  </data>
+  <data name="USER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
+    <value>User does not have permission to access this resource.</value>
   </data>
 </root>

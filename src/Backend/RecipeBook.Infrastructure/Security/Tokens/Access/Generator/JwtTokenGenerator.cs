@@ -16,7 +16,7 @@ namespace RecipeBook.Infrastructure.Security.Tokens.Access.Generator
             _signingKey = signingKey;
         }
 
-        public string Generate(Guid userIdentifier)
+        public string Generate(Guid userIdentifier, bool expired = false)
         {
             List<Claim> claims = new()
             {
@@ -29,9 +29,13 @@ namespace RecipeBook.Infrastructure.Security.Tokens.Access.Generator
                 Expires = DateTime.UtcNow.AddMinutes(_expirationTimeMinutes),
                 SigningCredentials = new SigningCredentials(SecurityKey(_signingKey), SecurityAlgorithms.HmacSha256Signature)
             };
-
+            if (expired)
+            {
+                tokenDescriptor.NotBefore = DateTime.UtcNow.AddMinutes(-10);
+                tokenDescriptor.Expires = DateTime.UtcNow.AddMinutes(-5);
+            }
+                
             JwtSecurityTokenHandler tokenHandle = new();
-
             SecurityToken securityToken = tokenHandle.CreateToken(tokenDescriptor);
 
             return tokenHandle.WriteToken(securityToken);

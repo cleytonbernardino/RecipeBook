@@ -23,6 +23,13 @@ namespace WebApi.Test
             return await _httpClient.GetAsync(method);
         }
 
+        protected async Task<HttpResponseMessage> DoPut(string method, object request, string token, string culture = "en")
+        {
+            ChangeRequestCulture(culture);
+            AddBearerToken(token);
+            return await _httpClient.PutAsJsonAsync(method, request);
+        }
+
         protected static async Task<JsonElement> GetJsonElementAsync(HttpResponseMessage response)
         {
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();

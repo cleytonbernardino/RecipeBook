@@ -138,6 +138,9 @@
   <data name="NO_TOKEN" xml:space="preserve">
     <value>No token was found in the request.</value>
   </data>
+  <data name="PASSWORD_DIFFERENT_FROM_CURRENT_PASSWORD" xml:space="preserve">
+    <value>Password different from current password.</value>
+  </data>
   <data name="PASSWORD_EMPTY" xml:space="preserve">
     <value>Password cannot be blank.</value>
   </data>

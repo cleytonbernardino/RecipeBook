@@ -2,6 +2,7 @@
 using RecipeBook.Application.UserCases.User.Register;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Exceptions;
+using Validators.Test.InlineData;
 
 namespace Validators.Test.User.Register
 {
@@ -61,12 +62,7 @@ namespace Validators.Test.User.Register
         }
 
         [Theory]
-        [InlineData(0)]
-        [InlineData(1)]
-        [InlineData(2)]
-        [InlineData(3)]
-        [InlineData(4)]
-        [InlineData(5)]
+        [ClassData(typeof(InlinePasswordMaxLenght))]
         public void Erro_Password_Lenght_Invalid(int passwordLenght)
         {
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build(passwordLenght);
@@ -77,6 +73,20 @@ namespace Validators.Test.User.Register
             Assert.False(result.IsValid);
             Assert.Single(result.Errors);
             Assert.Equal(result.Errors[0].ErrorMessage, ResourceMessagesException.PASSWORD_LENGTH_INVALID);
+        }
+
+        [Fact]
+        public void Erro_Password_Empty()
+        {
+            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            request.Password = "";
+
+            RegisterUserValidator validator = new();
+            var result = validator.Validate(request);
+
+            Assert.False(result.IsValid);
+            Assert.Single(result.Errors);
+            Assert.Equal(result.Errors[0].ErrorMessage, ResourceMessagesException.PASSWORD_EMPTY);
         }
     }
 }

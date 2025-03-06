@@ -7,6 +7,7 @@ using RecipeBook.Application.Cryptography;
 using RecipeBook.Application.UserCases.Login.DoLogin;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Communiction.Responses;
+using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
@@ -49,7 +50,7 @@ namespace UseCases.Test.Login.DoLogin
 
         private static DoLoginUseCase createUseCase(RecipeBook.Domain.Entities.User? user = null)
         {
-            PasswordEncripter passwordEncripty = PasswordEncripterBuilder.Build();
+            IPasswordEncripter passwordEncripty = PasswordEncripterBuilder.Build();
             UserReadOnlyRepositoryBuilder readOnlyRepository = new();
             IAccessTokenGenerator accessToken = JwtTokenGeneratorBuilder.Build();
 

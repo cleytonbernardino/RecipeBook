@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using RecipeBook.Application.Cryptography;
+using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.Tokens;
@@ -21,6 +23,7 @@ namespace RecipeBook.Infrastructure
         public static void AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             AddRepositories(services);
+            AddPasswordEncrypter(services, configuration);
             AddJwtTokens(services, configuration);
             AddLoggedUser(services);
             if (configuration.IsUnitTestEnviroment())
@@ -57,6 +60,12 @@ namespace RecipeBook.Infrastructure
                 .WithGlobalConnectionString(connectionString)
                 .ScanIn(Assembly.Load("RecipeBook.Infrastructure")).For.All()
             );
+        }
+
+        private static void AddPasswordEncrypter(IServiceCollection services, IConfiguration configuration)
+        {
+            string passwordSalt = configuration.GetSection("Settings:Passwords:Salt").Value!;
+            services.AddScoped<IPasswordEncripter>(option => new Sha512Encripter(passwordSalt));
         }
 
         private static void AddJwtTokens(IServiceCollection services, IConfiguration configuration)

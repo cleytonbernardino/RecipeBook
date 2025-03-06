@@ -138,6 +138,9 @@
   <data name="NO_TOKEN" xml:space="preserve">
     <value>Nenhum token foi encontrado na requisição.</value>
   </data>
+  <data name="PASSWORD_DIFFERENT_FROM_CURRENT_PASSWORD" xml:space="preserve">
+    <value>Contraseña diferente a la contraseña actual.</value>
+  </data>
   <data name="PASSWORD_EMPTY" xml:space="preserve">
     <value>La contraseña no puede quedar en blanco.</value>
   </data>

@@ -1,13 +1,14 @@
-﻿using System.Security.Cryptography;
+﻿using RecipeBook.Domain.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace RecipeBook.Application.Cryptography
 {
-    public class PasswordEncripter
+    public class Sha512Encripter : IPasswordEncripter
     {
         private readonly string _salt;
 
-        public PasswordEncripter(string salt) => _salt = salt;
+        public Sha512Encripter(string salt) => _salt = salt;
 
         public string Encript(string password)
         {

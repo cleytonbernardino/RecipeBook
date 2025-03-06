@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
-using RecipeBook.Application.Cryptography;
 using RecipeBook.Communiction.Requests;
 using RecipeBook.Communiction.Responses;
+using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.Tokens;
@@ -17,7 +17,7 @@ namespace RecipeBook.Application.UserCases.User.Register
         private readonly IUnitOfWork _unitOfWork;
         private readonly IMapper _mapper;
         private readonly IAccessTokenGenerator _accessTokenGenerator;
-        private readonly PasswordEncripter _passwordEncripter;
+        private readonly IPasswordEncripter _passwordEncripter;
 
         public RegisterUserUseCase(
             IUserReadOnlyRepository readOnlyRepository,
@@ -25,7 +25,7 @@ namespace RecipeBook.Application.UserCases.User.Register
             IUnitOfWork unitOfWork,
             IMapper mapper,
             IAccessTokenGenerator accessTokenGenerator,
-            PasswordEncripter passwordEncripter
+            IPasswordEncripter passwordEncripter
         )
         {
             _userReadOnlyRepository = readOnlyRepository;

@@ -34,7 +34,7 @@ namespace RecipeBook.API.Filter
         private static void ThrowUnknowException(ExceptionContext context)
         {
             context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            context.Result = new OkObjectResult(new ResponseErrorJson(ResourceMessagesException.UNKNOWN_ERROR));
+            context.Result = new ObjectResult(new ResponseErrorJson(ResourceMessagesException.UNKNOWN_ERROR));
         }
     }
 }

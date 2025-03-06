@@ -1,6 +1,6 @@
 ﻿using Bogus;
 using CommonTestUtilities.Cryptography;
-using RecipeBook.Application.Cryptography;
+using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Entities;
 
 namespace CommonTestUtilities.Entities
@@ -9,7 +9,7 @@ namespace CommonTestUtilities.Entities
     {
         public static (User user, string password) Build()
         {
-            PasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
+            IPasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
             string password = new Faker().Internet.Password();
             string encriptyPassword = passwordEncripter.Encript(password);
 

@@ -44,7 +44,7 @@ namespace RecipeBook.Application.UserCases.User.ChangePassword
 
         private void Validator(RequestChangePasswordJson request, Domain.Entities.User loggedUser)
         {
-            ChangePasswordUseCaseValidator validator = new();
+            ChangePasswordValidator validator = new();
             var result = validator.Validate(request);
 
             string currentPasswordEncripted = _passwordEncripter.Encript(request.Password);

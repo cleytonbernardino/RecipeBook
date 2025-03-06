@@ -77,7 +77,7 @@ namespace UseCases.Test.User.ChangePassword
             Assert.NotEqual(user.Password, encriptedPassword);
         }
 
-        private ChangePasswordUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)
+        private static ChangePasswordUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)
         {
             ILoggedUser loggedUserInterface = LoggedUserBuilder.Build(user);
             IUserUpdateOnlyRepository repository = new UserUpdateOnlyRepositoryBuilder().GetById(user).Build();

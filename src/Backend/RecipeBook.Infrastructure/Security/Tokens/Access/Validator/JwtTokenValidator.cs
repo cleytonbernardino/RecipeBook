@@ -7,13 +7,11 @@ namespace RecipeBook.Infrastructure.Security.Tokens.Access.Validator
 {
     public class JwtTokenValidator : JwtTokenHandle, IAccessTokenValidator
     {
-        private readonly uint _expirationTimeMinutes;
         private readonly string _signingKey;
 
         public JwtTokenValidator(uint expirationTimeMinutes, string signingKey)
         {
             _signingKey = signingKey;
-            _expirationTimeMinutes = expirationTimeMinutes;
         }
 
         public Guid ValidateAndGetUserIdentifier(string token)

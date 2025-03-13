@@ -1,4 +1,4 @@
-﻿namespace RecipeBook.Communiction.Responses
+﻿namespace RecipeBook.Communication.Responses
 {
     public class ResponseUserProfileJson
     {

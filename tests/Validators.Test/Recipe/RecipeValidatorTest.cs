@@ -1,7 +1,7 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.Recipe;
-using RecipeBook.Communiction.Enums;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Enums;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 
 namespace Validators.Test.Recipe
@@ -117,7 +117,7 @@ namespace Validators.Test.Recipe
             Assert.Equal(ResourceMessagesException.INGREDIENT_EMPTY, result.Errors[0].ToString());
 
         }
-        
+
         [Fact]
         public void Error_Empty_Instructions()
         {

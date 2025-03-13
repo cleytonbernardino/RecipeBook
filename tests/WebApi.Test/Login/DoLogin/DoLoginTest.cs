@@ -1,6 +1,6 @@
 ﻿using CommonTestUtilities.Requests;
 using Microsoft.AspNetCore.Http;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Text.Json;
@@ -28,7 +28,7 @@ namespace WebApi.Test.Login.DoLogin
         {
             RequestLoginJson request = new()
             {
-                Email = _email, 
+                Email = _email,
                 Password = _password
             };
 

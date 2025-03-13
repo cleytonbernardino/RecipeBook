@@ -1,4 +1,4 @@
-﻿namespace RecipeBook.Communiction.Enums
+﻿namespace RecipeBook.Communication.Enums
 {
     public enum Difficulty
     {

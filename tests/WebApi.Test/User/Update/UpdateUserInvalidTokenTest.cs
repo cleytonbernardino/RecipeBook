@@ -1,7 +1,7 @@
 ﻿using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
 using Microsoft.AspNetCore.Http;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Text.Json;
@@ -47,7 +47,7 @@ namespace WebApi.Test.User.Update
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
             var erros = jsonElement.GetProperty("errors").EnumerateArray();
-            
+
             Assert.Single(erros);
 
             string expected_message = ResourceMessagesException.ResourceManager.GetString("NO_TOKEN", new CultureInfo(culture))!;
@@ -57,17 +57,17 @@ namespace WebApi.Test.User.Update
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Token_Without_User(string culture)
-        {            
+        {
             string token = JwtTokenGeneratorBuilder.Build().Generate(Guid.NewGuid());
-            
+
             RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
             HttpResponseMessage response = await DoPut(METHOD, request, token, culture);
-            
+
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
             var erros = jsonElement.GetProperty("errors").EnumerateArray();
-            
+
             Assert.Single(erros);
 
             string expected_message = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
@@ -82,7 +82,7 @@ namespace WebApi.Test.User.Update
 
             RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
             HttpResponseMessage response = await DoPut(METHOD, request, token, culture);
-            
+
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);

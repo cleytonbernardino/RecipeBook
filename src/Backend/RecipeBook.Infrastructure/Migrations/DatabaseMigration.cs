@@ -18,7 +18,7 @@ namespace RecipeBook.Infrastructure.Migrations
             MySqlConnectionStringBuilder connectionStringBuilder = new(connectionString);
             string databaseName = connectionStringBuilder.Database;
             connectionStringBuilder.Remove("Database");
-            
+
             using MySqlConnection dbConnection = new(connectionStringBuilder.ConnectionString);
 
             dbConnection.Execute($"create database if not exists {databaseName};");

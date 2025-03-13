@@ -1,4 +1,4 @@
-﻿using RecipeBook.Communiction.Requests;
+﻿using RecipeBook.Communication.Requests;
 using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
@@ -19,7 +19,7 @@ namespace RecipeBook.Application.UserCases.User.ChangePassword
             ILoggedUser loggedUser,
             IUserUpdateOnlyRepository userUpdateOnly,
             IPasswordEncripter passwordEncripter,
-            IUnitOfWork unitOfWork    
+            IUnitOfWork unitOfWork
         )
         {
             _loggedUser = loggedUser;
@@ -33,7 +33,7 @@ namespace RecipeBook.Application.UserCases.User.ChangePassword
             var loggedUser = await _loggedUser.User();
 
             Validator(request, loggedUser);
-            
+
             var user = await _userUpdateOnly.GetById(loggedUser.ID);
 
             user.Password = _passwordEncripter.Encript(request.NewPassword);

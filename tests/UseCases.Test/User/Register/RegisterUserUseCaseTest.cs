@@ -4,7 +4,7 @@ using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
 using RecipeBook.Application.UserCases.User.Register;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 
@@ -30,14 +30,14 @@ namespace UseCases.Test.User.Register
         public async Task Erro_Email_Already_Registered()
         {
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
-            
+
             RegisterUserUseCase useCase = CreateUseCase(request.Email);
 
             Func<Task> act = async () => await useCase.Execute(request);
 
             var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
             Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(exception.ErrorMessagens[0], ResourceMessagesException.EMAIL_IN_USE);       
+            Assert.Equal(exception.ErrorMessagens[0], ResourceMessagesException.EMAIL_IN_USE);
         }
 
         [Fact]

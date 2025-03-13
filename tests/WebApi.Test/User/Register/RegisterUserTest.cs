@@ -1,5 +1,5 @@
 ﻿using CommonTestUtilities.Requests;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Net;

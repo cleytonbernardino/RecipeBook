@@ -3,10 +3,9 @@ using CommonTestUtilities.Entities;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
-using RecipeBook.Application.Cryptography;
 using RecipeBook.Application.UserCases.Login.DoLogin;
-using RecipeBook.Communiction.Requests;
-using RecipeBook.Communiction.Responses;
+using RecipeBook.Communication.Requests;
+using RecipeBook.Communication.Responses;
 using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Exceptions;
@@ -20,7 +19,7 @@ namespace UseCases.Test.Login.DoLogin
         public async Task Success()
         {
             (var user, string password) = UserBuilder.Build();
-            
+
             DoLoginUseCase useCase = createUseCase(user);
 
             ResponseResgisteredUserJson result = await useCase.Execute(new RequestLoginJson()
@@ -39,7 +38,7 @@ namespace UseCases.Test.Login.DoLogin
         public async Task Error_Invalid_User()
         {
             RequestLoginJson request = RequestLoginJsonBuilder.Build();
-            
+
             DoLoginUseCase useCase = createUseCase();
 
             Func<Task> act = async () => { await useCase.Execute(request); };

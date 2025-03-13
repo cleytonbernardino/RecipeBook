@@ -8,7 +8,7 @@
         public Enums.CookingTime CookingTime { get; set; }
         public Enums.Difficulty? Difficulty { get; set; }
         public IList<Ingredient> Ingredients { get; set; } = [];
-        public IList<Intruction> Intructions { get; set; } = [];
+        public IList<Instruction> Instructions { get; set; } = [];
         public IList<DishType> DishTypes { get; set; } = [];
     }
 }

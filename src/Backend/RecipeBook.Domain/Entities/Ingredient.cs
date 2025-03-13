@@ -1,6 +1,9 @@
-﻿namespace RecipeBook.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace RecipeBook.Domain.Entities
 {
-    public class Ingredient
+    [Table("Ingredients")]
+    public class Ingredient : EntityBase
     {
         public long RecipeId { get; set; }
         public string Name { get; set; } = "";

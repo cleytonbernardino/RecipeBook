@@ -11,10 +11,11 @@
     <PackageReference Include="FluentValidation" Version="11.11.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.2" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Binder" Version="9.0.2" />
+    <PackageReference Include="Sqids" Version="3.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\RecipeBook.Communiction\RecipeBook.Communiction.csproj" />
+    <ProjectReference Include="..\..\Shared\RecipeBook.Communiction\RecipeBook.Communication.csproj" />
     <ProjectReference Include="..\..\Shared\RecipeBook.Exceptions\RecipeBook.Exceptions.csproj" />
     <ProjectReference Include="..\RecipeBook.Domain\RecipeBook.Domain.csproj" />
   </ItemGroup>

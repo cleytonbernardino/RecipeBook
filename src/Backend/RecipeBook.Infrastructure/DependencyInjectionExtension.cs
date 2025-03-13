@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using RecipeBook.Application.Cryptography;
 using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories;
+using RecipeBook.Domain.Repositories.Recipe;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Domain.Services.LoggedUser;
@@ -48,6 +49,7 @@ namespace RecipeBook.Infrastructure
             services.AddScoped<IUserReadOnlyRepository, UserRepository>();
             services.AddScoped<IUserWriteOnlyRepository, UserRepository>();
             services.AddScoped<IUserUpdateOnlyRepository, UserRepository>();
+            services.AddScoped<IRecipeWriteOnlyRepository, RecipeRepository>();
             services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 

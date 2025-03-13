@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using RecipeBook.Communication.Responses;
+using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 
 namespace RecipeBook.API.Filter
@@ -32,8 +33,7 @@ namespace RecipeBook.API.Filter
 
         private static void ThrowUnknowException(ExceptionContext context)
         {
-            context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
-            //context.Result = new ObjectResult(new ResponseErrorJson(ResourceMessagesException.UNKNOWN_ERROR));
+            context.Result = new ObjectResult(new ResponseErrorJson(ResourceMessagesException.UNKNOWN_ERROR));
             context.Result = new ObjectResult(new ResponseErrorJson(context.Exception.Message));
         }
     }

@@ -190,5 +190,19 @@ namespace Validators.Test.Recipe
             Assert.Single(result.Errors);
             Assert.Equal(ResourceMessagesException.DISH_TYPE_NOT_SUPPORTED, result.Errors[0].ToString());
         }
+
+        [Fact]
+        public void Error_Instructions_Too_Long()
+        {
+            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+            request.Instructions[0].Text = RequestStringGenerator.Paragraphs(minCharacters: 2001);
+
+            RecipeValidator validator = new();
+            var result = validator.Validate(request);
+
+            Assert.False(result.IsValid);
+            Assert.Single(result.Errors);
+            Assert.Equal(ResourceMessagesException.INSTRUCTION_EXCEEDS_MAXIMUM_SIZE, result.Errors[0].ToString());
+        }
     }
 }

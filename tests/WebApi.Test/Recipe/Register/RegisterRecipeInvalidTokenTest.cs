@@ -1,15 +1,17 @@
-﻿using CommonTestUtilities.Tokens;
+﻿using CommonTestUtilities.Requests;
+using CommonTestUtilities.Tokens;
 using Microsoft.AspNetCore.Http;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
-namespace WebApi.Test.User.Profile
+namespace WebApi.Test.Recipe.Register
 {
     public class RegisterRecipeInvalidTokenTest : RecipeBookClassFixture
     {
-        private const string METHOD = "user";
+        private const string METHOD = "recipe";
 
         private readonly Guid _userIndentifier;
 
@@ -22,7 +24,9 @@ namespace WebApi.Test.User.Profile
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Invalid_Token(string culture)
         {
-            HttpResponseMessage response = await DoGet(METHOD, "TokenInvalid", culture);
+            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+
+            HttpResponseMessage response = await DoPost(METHOD, request, token: "TokenInvalid", culture);
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
@@ -38,7 +42,9 @@ namespace WebApi.Test.User.Profile
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Without_Token(string culture)
         {
-            HttpResponseMessage response = await DoGet(METHOD, "", culture);
+            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+
+            HttpResponseMessage response = await DoPost(METHOD, request, token: "", culture: culture);
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
@@ -54,8 +60,10 @@ namespace WebApi.Test.User.Profile
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Token_Without_User(string culture)
         {
+            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+
             string token = JwtTokenGeneratorBuilder.Build().Generate(Guid.NewGuid());
-            HttpResponseMessage response = await DoGet(METHOD, token, culture);
+            HttpResponseMessage response = await DoPost(METHOD, request, token, culture);
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
@@ -71,8 +79,10 @@ namespace WebApi.Test.User.Profile
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Token_Expired(string culture)
         {
+            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier, true);
-            HttpResponseMessage response = await DoGet(METHOD, token, culture);
+            HttpResponseMessage response = await DoPost(METHOD, request, token, culture);
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);

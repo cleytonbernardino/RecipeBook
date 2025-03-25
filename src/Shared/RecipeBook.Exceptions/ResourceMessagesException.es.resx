@@ -129,6 +129,9 @@
   <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
     <value>Correo electrónico o contraseña no válidos.</value>
   </data>
+  <data name="TITLE_EMPTY" xml:space="preserve">
+    <value>El título no puede estar vacío.</value>
+  </data>
   <data name="EXPIRED_TOKEN" xml:space="preserve">
     <value>Token caducado.</value>
   </data>
@@ -152,5 +155,35 @@
   </data>
   <data name="USER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
     <value>El usuario no tiene permiso para acceder a este recurso.</value>
+  </data>
+  <data name="COOKING_TIME_NOT_SUPPORTED" xml:space="preserve">
+    <value>Tiempo de cocción no soportado.</value>
+  </data>
+  <data name="DIFFICULTY_NOT_SUPPORTED" xml:space="preserve">
+    <value>Dificultad no soportada.</value>
+  </data>
+  <data name="MUST_CONTAIN_ONE_INGREDIENT" xml:space="preserve">
+    <value>Debe contener al menos un ingrediente.</value>
+  </data>
+  <data name="MUST_CONTAIN_AN_INSTRUCTION" xml:space="preserve">
+    <value>Debe contener al menos una instrucción.</value>
+  </data>
+  <data name="DISH_TYPE_NOT_SUPPORTED" xml:space="preserve">
+    <value>Tipo de plato no compatible.</value>
+  </data>
+  <data name="INGREDIENT_EMPTY" xml:space="preserve">
+    <value>Ingrediente vacío.</value>
+  </data>
+  <data name="NO_NEGATIVE_INSTRUCTION_STEP" xml:space="preserve">
+    <value>Nenhuma instrucción negativa de paso.</value>
+  </data>
+  <data name="INSTRUCTION_EMPTY" xml:space="preserve">
+    <value>Instrucción vacía.</value>
+  </data>
+  <data name="INSTRUCTION_EXCEEDS_MAXIMUM_SIZE" xml:space="preserve">
+    <value>La instrucción excede el tamaño máximo.</value>
+  </data>
+  <data name="TWO_OR_MORE_INSTRUCTIONS_HAVE_THE_SAME_ORDER" xml:space="preserve">
+    <value>Dos o más instrucciones tienen el mismo orden.</value>
   </data>
 </root>

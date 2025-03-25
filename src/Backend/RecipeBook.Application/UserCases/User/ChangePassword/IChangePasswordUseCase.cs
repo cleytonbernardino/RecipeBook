@@ -1,4 +1,4 @@
-﻿using RecipeBook.Communiction.Requests;
+﻿using RecipeBook.Communication.Requests;
 
 namespace RecipeBook.Application.UserCases.User.ChangePassword
 {

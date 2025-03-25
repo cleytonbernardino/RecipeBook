@@ -1,5 +1,5 @@
 ﻿using CommonTestUtilities.Requests;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Net;
@@ -10,7 +10,7 @@ namespace WebApi.Test.User.Register
 {
     public class RegisterUserTest : RecipeBookClassFixture
     {
-        private readonly string _method = "user";
+        private const string METHOD = "user";
 
         public RegisterUserTest(CustomWebApplicationFactory factory) : base(factory) { }
 
@@ -19,7 +19,7 @@ namespace WebApi.Test.User.Register
         {
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
-            HttpResponseMessage response = await DoPost(_method, request);
+            HttpResponseMessage response = await DoPost(METHOD, request);
 
             Assert.Equal(HttpStatusCode.Created, response.StatusCode);
 
@@ -40,7 +40,7 @@ namespace WebApi.Test.User.Register
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Name = "";
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -64,7 +64,7 @@ namespace WebApi.Test.User.Register
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Email = string.Empty;
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -88,7 +88,7 @@ namespace WebApi.Test.User.Register
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Email = "email.com";
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -111,8 +111,8 @@ namespace WebApi.Test.User.Register
         {
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
 
-            await DoPost(_method, request);
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            await DoPost(method: METHOD, request: request);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 
@@ -136,7 +136,7 @@ namespace WebApi.Test.User.Register
             RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
             request.Password = "123";
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
 

@@ -2,7 +2,7 @@
 using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Mapper;
 using RecipeBook.Application.UserCases.User.Profile;
-using RecipeBook.Communiction.Responses;
+using RecipeBook.Communication.Responses;
 
 namespace UseCases.Test.User.Profile
 {

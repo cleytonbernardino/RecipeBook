@@ -38,7 +38,7 @@ namespace WebApi.Test
                     });
 
                     using var scope = services.BuildServiceProvider().CreateScope();
-                    
+
                     var dbContext = scope.ServiceProvider.GetRequiredService<RecipeBookDbContext>();
                     dbContext.Database.EnsureDeleted();
 

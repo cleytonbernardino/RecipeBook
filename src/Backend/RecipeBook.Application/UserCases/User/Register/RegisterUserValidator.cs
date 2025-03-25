@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using RecipeBook.Application.SharedValidators;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 
 namespace RecipeBook.Application.UserCases.User.Register

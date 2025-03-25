@@ -7,13 +7,13 @@ using WebApi.Test.InlineData;
 
 namespace WebApi.Test.User.Profile
 {
-    public class GetUserProfileInvalidTokenTest : RecipeBookClassFixture
+    public class RegisterRecipeInvalidTokenTest : RecipeBookClassFixture
     {
         private const string METHOD = "user";
 
         private readonly Guid _userIndentifier;
 
-        public GetUserProfileInvalidTokenTest(CustomWebApplicationFactory factory) : base(factory)
+        public RegisterRecipeInvalidTokenTest(CustomWebApplicationFactory factory) : base(factory)
         {
             _userIndentifier = factory.GetUserIndentifier();
         }

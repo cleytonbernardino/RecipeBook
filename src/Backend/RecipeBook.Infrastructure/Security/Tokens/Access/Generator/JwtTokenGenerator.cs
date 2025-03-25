@@ -34,7 +34,7 @@ namespace RecipeBook.Infrastructure.Security.Tokens.Access.Generator
                 tokenDescriptor.NotBefore = DateTime.UtcNow.AddMinutes(-10);
                 tokenDescriptor.Expires = DateTime.UtcNow.AddMinutes(-5);
             }
-                
+
             JwtSecurityTokenHandler tokenHandle = new();
             SecurityToken securityToken = tokenHandle.CreateToken(tokenDescriptor);
 

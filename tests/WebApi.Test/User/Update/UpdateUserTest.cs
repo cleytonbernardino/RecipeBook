@@ -1,9 +1,7 @@
-﻿using CommonTestUtilities.Entities;
-using CommonTestUtilities.Requests;
+﻿using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity.Data;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Text.Json;
@@ -105,9 +103,9 @@ namespace WebApi.Test.User.Update
             // Creating another user to use the same email
             RequestRegisterUserJson userRequest = RequestUserJsonBuilder.Build();
             await DoPost(METHOD, userRequest);
-            
+
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
-            
+
             RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
             request.Email = userRequest.Email;
 

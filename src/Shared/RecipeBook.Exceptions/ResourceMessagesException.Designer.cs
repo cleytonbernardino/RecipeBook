@@ -61,6 +61,33 @@ namespace RecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Cooking time not supported..
+        /// </summary>
+        public static string COOKING_TIME_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("COOKING_TIME_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Difficulty not supported..
+        /// </summary>
+        public static string DIFFICULTY_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("DIFFICULTY_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Dish type not supported..
+        /// </summary>
+        public static string DISH_TYPE_NOT_SUPPORTED {
+            get {
+                return ResourceManager.GetString("DISH_TYPE_NOT_SUPPORTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Email cannot be empty..
         /// </summary>
         public static string EMAIL_EMPTY {
@@ -106,11 +133,65 @@ namespace RecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ingredient empty..
+        /// </summary>
+        public static string INGREDIENT_EMPTY {
+            get {
+                return ResourceManager.GetString("INGREDIENT_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Empty instruction..
+        /// </summary>
+        public static string INSTRUCTION_EMPTY {
+            get {
+                return ResourceManager.GetString("INSTRUCTION_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Instruction exceeds maximum size..
+        /// </summary>
+        public static string INSTRUCTION_EXCEEDS_MAXIMUM_SIZE {
+            get {
+                return ResourceManager.GetString("INSTRUCTION_EXCEEDS_MAXIMUM_SIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Must contain at least one instruction..
+        /// </summary>
+        public static string MUST_CONTAIN_AN_INSTRUCTION {
+            get {
+                return ResourceManager.GetString("MUST_CONTAIN_AN_INSTRUCTION", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Must contain at least one ingredient..
+        /// </summary>
+        public static string MUST_CONTAIN_ONE_INGREDIENT {
+            get {
+                return ResourceManager.GetString("MUST_CONTAIN_ONE_INGREDIENT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Name cannot be empty..
         /// </summary>
         public static string NAME_EMPTY {
             get {
                 return ResourceManager.GetString("NAME_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a No negative step instructions..
+        /// </summary>
+        public static string NO_NEGATIVE_INSTRUCTION_STEP {
+            get {
+                return ResourceManager.GetString("NO_NEGATIVE_INSTRUCTION_STEP", resourceCulture);
             }
         }
         
@@ -147,6 +228,24 @@ namespace RecipeBook.Exceptions {
         public static string PASSWORD_LENGTH_INVALID {
             get {
                 return ResourceManager.GetString("PASSWORD_LENGTH_INVALID", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a The title cannot be empty..
+        /// </summary>
+        public static string TITLE_EMPTY {
+            get {
+                return ResourceManager.GetString("TITLE_EMPTY", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Two or more instructions have the same order..
+        /// </summary>
+        public static string TWO_OR_MORE_INSTRUCTIONS_HAVE_THE_SAME_ORDER {
+            get {
+                return ResourceManager.GetString("TWO_OR_MORE_INSTRUCTIONS_HAVE_THE_SAME_ORDER", resourceCulture);
             }
         }
         

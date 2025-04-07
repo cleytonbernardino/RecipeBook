@@ -50,7 +50,7 @@ namespace RecipeBook.Application.UserCases.Recipe.Filter
             FilterRecipeValidator validator = new();
             var result = validator.Validate(request);
 
-            if (result.IsValid)
+            if (!result.IsValid)
             {
                 var errMsg = result.Errors.Select(e => e.ErrorMessage).ToList();
                 throw new ErrorOnValidationException(errMsg);

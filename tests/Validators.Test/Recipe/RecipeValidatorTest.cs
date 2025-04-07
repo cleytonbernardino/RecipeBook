@@ -13,7 +13,7 @@ namespace Validators.Test.Recipe
         {
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.True(result.IsValid);
@@ -25,7 +25,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.CookingTime = null;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.True(result.IsValid);
@@ -37,7 +37,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Difficulty = null;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.True(result.IsValid);
@@ -49,7 +49,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.DishTypes.Clear();
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.True(result.IsValid);
@@ -64,7 +64,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Title = title!;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -78,7 +78,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.CookingTime = (CookingTime)1000;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -92,7 +92,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Difficulty = (Difficulty)1000;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -109,7 +109,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Ingredients.Add(ingredients!);
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -124,7 +124,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Instructions.Clear();
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -139,7 +139,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Instructions.First().Step = request.Instructions.Last().Step;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -153,7 +153,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Instructions[0].Step = -1;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -169,7 +169,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Instructions[0].Text = instructions;
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -183,7 +183,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.DishTypes.Add((DishType)1000);
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);
@@ -197,7 +197,7 @@ namespace Validators.Test.Recipe
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
             request.Instructions[0].Text = RequestStringGenerator.Paragraphs(minCharacters: 2001);
 
-            FilterRecipeValidator validator = new();
+            RecipeValidator validator = new();
             var result = validator.Validate(request);
 
             Assert.False(result.IsValid);

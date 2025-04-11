@@ -1,12 +1,10 @@
 ﻿using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
 using Microsoft.AspNetCore.Http;
-using RecipeBook.Application.UserCases.Recipe;
 using RecipeBook.Communication.Enums;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
-using System.Text.Json;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Recipe.Register

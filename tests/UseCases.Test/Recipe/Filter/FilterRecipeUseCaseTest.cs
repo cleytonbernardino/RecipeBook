@@ -61,7 +61,7 @@ namespace UseCases.Test.Recipe.Filter
         {
             ILoggedUser loggedUser = LoggedUserBuilder.Build(user);
             IRecipeReadOnlyRepository repository = new RecipeReadOnlyRepositoryBuilder().Filter(user, recipes).Build();
-            IMapper mapper = MapperBuilder.Build();1
+            IMapper mapper = MapperBuilder.Build();
 
             return new FilterRecipeUseCase(loggedUser, repository, mapper);
         }

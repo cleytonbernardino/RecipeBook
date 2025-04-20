@@ -1,0 +1,25 @@
+trigger:
+  branches:
+    include:
+      - main
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - name: GITHUB_USERNAME
+    value: 'cleytonbernardino'
+
+steps:
+  - checkout: self
+
+  - script: |
+      git config --global user.name "azure-pipeline"
+      git config --global user.email "pipeline@azuredevops.com"
+
+      git remote add github https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/RecipeBook.git
+
+      git push github main
+    displayName: 'Espelhar branch main para o GitHub'
+    env:
+      GITHUB_TOKEN: $(GITHUB_TOKEN)

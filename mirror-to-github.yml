@@ -17,6 +17,8 @@ steps:
       git config --global user.name "azure-pipeline"
       git config --global user.email "pipeline@azuredevops.com"
 
+      git checkout -b main
+
       git remote add github https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/RecipeBook.git
 
       git push github main

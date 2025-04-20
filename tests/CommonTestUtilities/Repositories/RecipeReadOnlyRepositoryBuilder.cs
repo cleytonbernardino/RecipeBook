@@ -1,5 +1,4 @@
 ﻿using Moq;
-using RecipeBook.Application.UserCases.Recipe.Filter;
 using RecipeBook.Domain.Dtos;
 using RecipeBook.Domain.Entities;
 using RecipeBook.Domain.Repositories.Recipe;
@@ -18,6 +17,13 @@ namespace CommonTestUtilities.Repositories
         {
             _repository.Setup(repository => repository.Filter(user, It.IsAny<FilterRecipesDto>())).ReturnsAsync(recipes);
             return this;
-        } 
+        }
+
+        public RecipeReadOnlyRepositoryBuilder GetById(User user, Recipe? recipe)
+        {
+            if (recipe is not null)
+                _repository.Setup(repository => repository.GetById(user, recipe.ID)).ReturnsAsync(recipe);
+            return this;
+        }
     }
 }

@@ -56,5 +56,13 @@ namespace RecipeBook.Infrastructure.DataAccess.Repositories
                 .Include(recipe => recipe.DishTypes)
                 .FirstOrDefaultAsync(recipe => recipe.ID == recipeId && recipe.Active && recipe.UserId == user.ID);
         }
+        public async Task<bool> IsValidRecipeOwner(User user, long recipeId) => 
+            await _dbContext.Recipes.AnyAsync(recipe => recipe.ID == recipeId && recipe.UserId == user.ID && recipe.Active);
+
+        public async Task Delete(long recipeId)
+        {
+            var recipe = await _dbContext.Recipes.FindAsync(recipeId);
+            _dbContext.Recipes.Remove(recipe!);
+        }
     }
 }

@@ -186,4 +186,7 @@
   <data name="TWO_OR_MORE_INSTRUCTIONS_HAVE_THE_SAME_ORDER" xml:space="preserve">
     <value>Duas ou mais instruções têm a mesma ordem.</value>
   </data>
+  <data name="RECIPE_NOT_FOUND" xml:space="preserve">
+    <value>Receita não encontrada.</value>
+  </data>
 </root>

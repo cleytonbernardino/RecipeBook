@@ -40,11 +40,21 @@ public class AutoMapping : Profile
     private void DomainToResponse()
     {
         CreateMap<User, ResponseUserProfileJson>();
+
         CreateMap<Recipe, ResponseRegisteredRecipeJson>()
             .ForMember(dest => dest.Id, conf => conf.MapFrom(source => _idEncoder.Encode(source.ID)));
+
         CreateMap<Recipe, ResponseShortRecipeJson>()
             .ForMember(dest => dest.Id, conf => conf.MapFrom(source => _idEncoder.Encode(source.ID)))
             .ForMember(dest => dest.AmountIngredients, conf => conf.MapFrom(source => source.Ingredients.Count));
+
+        CreateMap<Ingredient, ResponseIngredientsJson>()
+            .ForMember(dest => dest.Id, conf => conf.MapFrom(source => _idEncoder.Encode(source.ID)));
+        CreateMap<Instruction, ResponseInstructionJson>()
+            .ForMember(dest => dest.Id, conf => conf.MapFrom(source => _idEncoder.Encode(source.ID)));
+        CreateMap<Recipe, ResponseRecipeJson>()
+            .ForMember(dest => dest.Id, conf => conf.MapFrom(source => _idEncoder.Encode(source.ID)))
+            .ForMember(dest => dest.DishTypes, conf => conf.MapFrom(source => source.DishTypes.Select(r => r.Type)));
     }
 }
 

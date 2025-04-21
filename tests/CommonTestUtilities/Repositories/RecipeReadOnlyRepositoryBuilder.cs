@@ -25,5 +25,12 @@ namespace CommonTestUtilities.Repositories
                 _repository.Setup(repository => repository.GetById(user, recipe.ID)).ReturnsAsync(recipe);
             return this;
         }
+
+        public RecipeReadOnlyRepositoryBuilder IsValidRecipeOwner(User user, Recipe? recipe)
+        {
+            if (recipe is not null)
+                _repository.Setup(repository => repository.IsValidRecipeOwner(user, recipe.ID)).ReturnsAsync(true);
+            return this;
+        }
     }
 }

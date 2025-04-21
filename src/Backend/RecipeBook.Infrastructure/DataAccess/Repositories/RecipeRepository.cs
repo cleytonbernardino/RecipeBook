@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query;
 using RecipeBook.Domain.Dtos;
 using RecipeBook.Domain.Entities;
 using RecipeBook.Domain.Repositories.Recipe;
 
 namespace RecipeBook.Infrastructure.DataAccess.Repositories
 {
-    public class RecipeRepository : IRecipeReadOnlyRepository, IRecipeWriteOnlyRepository
+    public class RecipeRepository : IRecipeReadOnlyRepository, IRecipeWriteOnlyRepository, IRecipeUpdateOnlyRepository
     {
         private readonly RecipeBookDbContext _dbContext;
 
@@ -46,23 +47,37 @@ namespace RecipeBook.Infrastructure.DataAccess.Repositories
             return await query.ToListAsync();
         }
 
-        public async Task<Recipe?> GetById(User user, long recipeId)
+        async Task<Recipe?> IRecipeReadOnlyRepository.GetById(User user, long recipeId)
         {
-            return await _dbContext
-                .Recipes
-                .AsNoTracking()
-                .Include(recipe => recipe.Ingredients)
-                .Include(recipe => recipe.Instructions)
-                .Include(recipe => recipe.DishTypes)
+            return await GetFullRecipe()
+                .AsNoTracking() 
                 .FirstOrDefaultAsync(recipe => recipe.ID == recipeId && recipe.Active && recipe.UserId == user.ID);
         }
+
+        async Task<Recipe?> IRecipeUpdateOnlyRepository.GetById(User user, long recipeId)
+        {
+            return await GetFullRecipe()
+                .FirstOrDefaultAsync(recipe => recipe.ID == recipeId && recipe.Active && recipe.UserId == user.ID);
+        }
+
         public async Task<bool> IsValidRecipeOwner(User user, long recipeId) => 
             await _dbContext.Recipes.AnyAsync(recipe => recipe.ID == recipeId && recipe.UserId == user.ID && recipe.Active);
+
+        public void Update(Recipe recipe) => _dbContext.Recipes.Update(recipe);
 
         public async Task Delete(long recipeId)
         {
             var recipe = await _dbContext.Recipes.FindAsync(recipeId);
             _dbContext.Recipes.Remove(recipe!);
+        }
+
+        private IIncludableQueryable<Recipe, IList<DishType>> GetFullRecipe()
+        {
+            return _dbContext
+                .Recipes
+                .Include(recipe => recipe.Ingredients)
+                .Include(recipe => recipe.Instructions)
+                .Include(recipe => recipe.DishTypes);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Domain.Entities;
 using RecipeBook.Domain.Repositories;
@@ -50,7 +51,7 @@ namespace RecipeBook.Application.UserCases.Recipe.Update
             var instructions = request.Instructions.OrderBy(i => i.Step).ToList();
             for (int index = 0; index < instructions.Count; index++)
             {
-                instructions.ElementAt(index).Step = index + 1;
+                instructions[index].Step = index + 1;
             }
             recipe.Instructions = _mapper.Map<IList<Instruction>>(instructions);
 
@@ -59,7 +60,7 @@ namespace RecipeBook.Application.UserCases.Recipe.Update
             await _unitOfWork.Commit();
         }
 
-        private void Validate(RequestRecipeJson request)
+        private static void Validate(RequestRecipeJson request)
         {
             RecipeValidator validator = new();
             var result = validator.Validate(request);

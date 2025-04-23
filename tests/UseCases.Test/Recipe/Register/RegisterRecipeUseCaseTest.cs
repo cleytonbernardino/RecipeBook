@@ -3,7 +3,7 @@ using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Mapper;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
-using RecipeBook.Application.UserCases.Recipe;
+using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 

@@ -1,10 +1,11 @@
 ﻿using CommonTestUtilities.Requests;
-using RecipeBook.Application.UserCases.Recipe;
+using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Communication.Enums;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
+using System.Diagnostics.CodeAnalysis;
 
-namespace Validators.Test.Recipe
+namespace Validators.Test.RecipeGR
 {
     public class RecipeValidatorTest
     {
@@ -59,10 +60,11 @@ namespace Validators.Test.Recipe
         [InlineData(null)]
         [InlineData("    ")]
         [InlineData("")]
-        public void Error_Title_Empty(string? title)
+        [SuppressMessage("Usage", "xUnit1012:Null should only be used for nullable parameters", Justification = "Because is a unit test")]
+        public void Error_Title_Empty(string title)
         {
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
-            request.Title = title!;
+            request.Title = title;
 
             RecipeValidator validator = new();
             var result = validator.Validate(request);
@@ -104,10 +106,11 @@ namespace Validators.Test.Recipe
         [InlineData(null)]
         [InlineData("    ")]
         [InlineData("")]
-        public void Error_Empty_Value_Ingredients(string? ingredients)
+        [SuppressMessage("Usage", "xUnit1012:Null should only be used for nullable parameters", Justification = "Because is a unit test")]
+        public void Error_Empty_Value_Ingredients(string ingredients)
         {
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
-            request.Ingredients.Add(ingredients!);
+            request.Ingredients.Add(ingredients);
 
             RecipeValidator validator = new();
             var result = validator.Validate(request);
@@ -164,6 +167,8 @@ namespace Validators.Test.Recipe
         [Theory]
         [InlineData("    ")]
         [InlineData("")]
+        [InlineData(null)]
+        [SuppressMessage("Usage", "xUnit1012:Null should only be used for nullable parameters", Justification = "Because is a unit test")]
         public void Error_Empty_Value_Instructions(string instructions)
         {
             RequestRecipeJson request = RequestRecipeJsonBuilder.Build();

@@ -6,7 +6,7 @@ using RecipeBook.Domain.Repositories.Recipe;
 using RecipeBook.Domain.Services.LoggedUser;
 using RecipeBook.Exceptions.ExceptionsBase;
 
-namespace RecipeBook.Application.UserCases.Recipe
+namespace RecipeBook.Application.UserCases.Recipe.Register
 {
     public class RecipeUseCase : IRecipeUseCase
     {
@@ -40,7 +40,7 @@ namespace RecipeBook.Application.UserCases.Recipe
             var instructions = request.Instructions.OrderBy(i => i.Step).ToList();
             for (int index = 0; index < instructions.Count; index++)
             {
-                instructions.ElementAt(index).Step = index + 1;
+                instructions[index].Step = index + 1;
             }
             recipe.Instructions = _mapper.Map<IList<Domain.Entities.Instruction>>(instructions);
 

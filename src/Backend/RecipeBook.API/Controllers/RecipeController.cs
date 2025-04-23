@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using RecipeBook.API.Attributes;
 using RecipeBook.API.Binders;
-using RecipeBook.Application.UserCases.Recipe;
 using RecipeBook.Application.UserCases.Recipe.Delete;
 using RecipeBook.Application.UserCases.Recipe.Filter;
 using RecipeBook.Application.UserCases.Recipe.GetById;
+using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Application.UserCases.Recipe.Update;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Communication.Responses;

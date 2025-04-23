@@ -15,7 +15,7 @@ namespace UseCases.Test.Recipe.Delete
             var user = UserBuilder.Build().user;
             var recipe = RecipeBuilder.Build(user);
 
-            var useCase = createUseCase(user, recipe);
+            var useCase = CreateUseCase(user, recipe);
 
             await useCase.Execute(recipe.ID);
 
@@ -28,7 +28,7 @@ namespace UseCases.Test.Recipe.Delete
         {
             var user = UserBuilder.Build().user;
 
-            var useCase = createUseCase(user);
+            var useCase = CreateUseCase(user);
             async Task act() { await useCase.Execute(1000); };
 
             var result = await Assert.ThrowsAsync<NotFoundException>(act);
@@ -36,7 +36,7 @@ namespace UseCases.Test.Recipe.Delete
             Assert.Equal(ResourceMessagesException.RECIPE_NOT_FOUND, result.Message);
         }
 
-        private DeleteRecipeUseCase createUseCase(RecipeBook.Domain.Entities.User user, RecipeBook.Domain.Entities.Recipe? recipe = null)
+        private static DeleteRecipeUseCase CreateUseCase(RecipeBook.Domain.Entities.User user, RecipeBook.Domain.Entities.Recipe? recipe = null)
         {
             var loggedUser = LoggedUserBuilder.Build(user);
             var readOnlyRepository = new RecipeReadOnlyRepositoryBuilder().IsValidRecipeOwner(user, recipe).Build();

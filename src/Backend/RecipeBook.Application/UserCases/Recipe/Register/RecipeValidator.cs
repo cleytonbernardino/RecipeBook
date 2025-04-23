@@ -2,7 +2,7 @@
 using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 
-namespace RecipeBook.Application.UserCases.Recipe
+namespace RecipeBook.Application.UserCases.Recipe.Register
 {
     public class RecipeValidator : AbstractValidator<RequestRecipeJson>
     {

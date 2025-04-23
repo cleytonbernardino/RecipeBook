@@ -1,7 +1,7 @@
 ﻿using RecipeBook.Communication.Requests;
 using RecipeBook.Communication.Responses;
 
-namespace RecipeBook.Application.UserCases.Recipe
+namespace RecipeBook.Application.UserCases.Recipe.Register
 {
     public interface IRecipeUseCase
     {

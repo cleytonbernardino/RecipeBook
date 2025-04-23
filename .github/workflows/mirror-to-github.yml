@@ -21,7 +21,7 @@ steps:
 
       git remote add github https://${GITHUB_USERNAME}:${GITHUB_TOKEN}@github.com/${GITHUB_USERNAME}/RecipeBook.git
 
-      git push origin main --force
+      git push github main --force
     displayName: 'Espelhar branch main para o GitHub'
     env:
       GITHUB_TOKEN: $(GITHUB_TOKEN)

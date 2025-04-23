@@ -1,4 +1,4 @@
-﻿using RecipeBook.Communiction.Responses;
+﻿using RecipeBook.Communication.Responses;
 
 namespace RecipeBook.Application.UserCases.User.Profile
 {

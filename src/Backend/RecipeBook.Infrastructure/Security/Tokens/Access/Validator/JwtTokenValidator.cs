@@ -27,7 +27,7 @@ namespace RecipeBook.Infrastructure.Security.Tokens.Access.Validator
             JwtSecurityTokenHandler tokenHandle = new();
 
             ClaimsPrincipal principal = tokenHandle.ValidateToken(token, validationParameter, out _);
-            
+
             string userIndentifier = principal.Claims.First(c => c.Type == ClaimTypes.Sid).Value;
 
             return Guid.Parse(userIndentifier);

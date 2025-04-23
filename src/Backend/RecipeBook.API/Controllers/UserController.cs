@@ -4,8 +4,8 @@ using RecipeBook.Application.UserCases.User.ChangePassword;
 using RecipeBook.Application.UserCases.User.Profile;
 using RecipeBook.Application.UserCases.User.Register;
 using RecipeBook.Application.UserCases.User.Update;
-using RecipeBook.Communiction.Requests;
-using RecipeBook.Communiction.Responses;
+using RecipeBook.Communication.Requests;
+using RecipeBook.Communication.Responses;
 
 namespace RecipeBook.API.Controllers
 {
@@ -14,8 +14,8 @@ namespace RecipeBook.API.Controllers
         [HttpPost]
         [ProducesResponseType(typeof(ResponseResgisteredUserJson), StatusCodes.Status201Created)]
         public async Task<IActionResult> Register(
-            [FromBody]     RequestRegisterUserJson request,
-            [FromServices] IRegisterUserUseCase    useCase
+            [FromBody] RequestRegisterUserJson request,
+            [FromServices] IRegisterUserUseCase useCase
         )
         {
             ResponseResgisteredUserJson result = await useCase.Execute(request);
@@ -36,8 +36,8 @@ namespace RecipeBook.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         [AuthenticatedUser]
         public async Task<IActionResult> UpdateProfile(
-            [FromBody]     RequestUpdateUserJson request,
-            [FromServices] IUpdateUserUseCase    useCase
+            [FromBody] RequestUpdateUserJson request,
+            [FromServices] IUpdateUserUseCase useCase
         )
         {
             await useCase.Execute(request);
@@ -49,8 +49,8 @@ namespace RecipeBook.API.Controllers
         [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
         [AuthenticatedUser]
         public async Task<IActionResult> ChangePassword(
-            [FromBody]     RequestChangePasswordJson request,
-            [FromServices] IChangePasswordUseCase    useCase
+            [FromBody] RequestChangePasswordJson request,
+            [FromServices] IChangePasswordUseCase useCase
         )
         {
             await useCase.Execute(request);

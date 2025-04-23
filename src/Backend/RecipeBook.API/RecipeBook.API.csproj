@@ -11,7 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Shared\RecipeBook.Communiction\RecipeBook.Communiction.csproj" />
+    <ProjectReference Include="..\..\Shared\RecipeBook.Communiction\RecipeBook.Communication.csproj" />
     <ProjectReference Include="..\..\Shared\RecipeBook.Exceptions\RecipeBook.Exceptions.csproj" />
     <ProjectReference Include="..\RecipeBook.Application\RecipeBook.Application.csproj" />
     <ProjectReference Include="..\RecipeBook.Infrastructure\RecipeBook.Infrastructure.csproj" />

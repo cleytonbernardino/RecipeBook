@@ -22,6 +22,8 @@ builder.Services.AddControllers().AddJsonOptions(
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(options =>
 {
+    options.OperationFilter<IdsFilter>();
+
     options.AddSecurityDefinition(TOKEN_PREFIX, new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme.
@@ -89,7 +91,7 @@ void MigrationDatabase()
         return;
 
     string connectionString = builder.Configuration.ConnectionString();
-    
+
     IServiceScope serviceScope = app.Services.GetRequiredService<IServiceScopeFactory>().CreateScope();
 
     DatabaseMigration.Migrate(connectionString, serviceScope.ServiceProvider);

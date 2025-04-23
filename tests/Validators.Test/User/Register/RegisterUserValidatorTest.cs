@@ -1,6 +1,6 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.Register;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using Validators.Test.InlineData;
 

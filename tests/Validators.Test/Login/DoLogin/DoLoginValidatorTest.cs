@@ -1,6 +1,6 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.Login.DoLogin;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 
 namespace Validators.Test.Login.DoLogin

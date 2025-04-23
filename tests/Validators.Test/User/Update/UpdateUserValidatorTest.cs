@@ -1,6 +1,6 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.Update;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 
 namespace Validators.Test.User.Update
 {
@@ -10,7 +10,7 @@ namespace Validators.Test.User.Update
         public void Success()
         {
             RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            
+
             UpdateUserValidator validator = new();
             var result = validator.Validate(request);
 

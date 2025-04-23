@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using RecipeBook.Communiction.Responses;
+using RecipeBook.Communication.Responses;
 using RecipeBook.Domain.Services.LoggedUser;
 
 namespace RecipeBook.Application.UserCases.User.Profile

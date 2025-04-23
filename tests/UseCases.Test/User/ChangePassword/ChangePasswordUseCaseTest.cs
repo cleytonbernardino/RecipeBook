@@ -4,7 +4,7 @@ using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.ChangePassword;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
@@ -49,7 +49,7 @@ namespace UseCases.Test.User.ChangePassword
             var exceptions = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
 
             Assert.Single(exceptions.ErrorMessagens);
-            
+
             IPasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
             string encriptedPassword = passwordEncripter.Encript(request.NewPassword);
 

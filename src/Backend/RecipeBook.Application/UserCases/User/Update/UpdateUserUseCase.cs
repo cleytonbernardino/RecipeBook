@@ -1,4 +1,4 @@
-﻿using RecipeBook.Communiction.Requests;
+﻿using RecipeBook.Communication.Requests;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Services.LoggedUser;
@@ -30,7 +30,7 @@ namespace RecipeBook.Application.UserCases.User.Update
         public async Task Execute(RequestUpdateUserJson request)
         {
             var loggedUser = await _loggedUser.User();
-            
+
             await Validate(request, loggedUser.Email);
 
             var user = await _userUpdateOnlyRepository.GetById(loggedUser.ID);

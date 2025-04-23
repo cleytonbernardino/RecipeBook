@@ -3,7 +3,7 @@ using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.Update;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Services.LoggedUser;
@@ -114,7 +114,7 @@ namespace UseCases.Test.User.Update
                 userReadOnly.ExistActiveUserWithEmail(email);
 
             return new UpdateUserUseCase(loggedUser, userReadOnly.Build(), userWriteOnly, unitOfWork);
-            
+
         }
     }
 }

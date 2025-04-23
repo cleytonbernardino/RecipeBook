@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using RecipeBook.Communiction.Responses;
+using RecipeBook.Communication.Responses;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 
@@ -29,12 +29,17 @@ namespace RecipeBook.API.Filter
                 context.HttpContext.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Result = new BadRequestObjectResult(new ResponseErrorJson(exception!.ErrorMessagens));
             }
+            else if (context.Exception is NotFoundException)
+            {
+                context.HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+                context.Result = new NotFoundObjectResult(new ResponseErrorJson(context.Exception.Message));
+            }
         }
 
         private static void ThrowUnknowException(ExceptionContext context)
         {
-            context.HttpContext.Response.StatusCode = StatusCodes.Status500InternalServerError;
             context.Result = new ObjectResult(new ResponseErrorJson(ResourceMessagesException.UNKNOWN_ERROR));
+            context.Result = new ObjectResult(new ResponseErrorJson(context.Exception.Message));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace RecipeBook.Communiction.Requests
+﻿namespace RecipeBook.Communication.Requests
 {
     public class RequestUpdateUserJson
     {

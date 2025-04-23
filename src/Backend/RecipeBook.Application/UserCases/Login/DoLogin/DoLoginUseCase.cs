@@ -1,5 +1,5 @@
-﻿using RecipeBook.Communiction.Requests;
-using RecipeBook.Communiction.Responses;
+﻿using RecipeBook.Communication.Requests;
+using RecipeBook.Communication.Responses;
 using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.Tokens;

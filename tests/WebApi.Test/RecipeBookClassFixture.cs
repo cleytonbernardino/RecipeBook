@@ -10,9 +10,10 @@ namespace WebApi.Test
 
         public RecipeBookClassFixture(CustomWebApplicationFactory factory) => _httpClient = factory.CreateClient();
 
-        protected async Task<HttpResponseMessage> DoPost(string method, object request, string culture = "en")
+        protected async Task<HttpResponseMessage> DoPost(string method, object request, string token = "", string culture = "en")
         {
             ChangeRequestCulture(culture);
+            AddBearerToken(token);
             return await _httpClient.PostAsJsonAsync(method, request);
         }
 
@@ -30,11 +31,24 @@ namespace WebApi.Test
             return await _httpClient.PutAsJsonAsync(method, request);
         }
 
+        protected async Task<HttpResponseMessage> DoDelete(string method, string token, string culture = "en")
+        {
+            ChangeRequestCulture(culture);
+            AddBearerToken(token);
+            return await _httpClient.DeleteAsync(method);
+        }
+
         protected static async Task<JsonElement> GetJsonElementAsync(HttpResponseMessage response)
         {
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();
             JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
             return responseData.RootElement;
+        }
+
+        protected static async Task<JsonElement.ArrayEnumerator> GetErrorList(HttpResponseMessage response)
+        {
+            JsonElement jsonElement = await GetJsonElementAsync(response);
+            return jsonElement.GetProperty("errors").EnumerateArray();
         }
 
         private void ChangeRequestCulture(string culture)

@@ -1,6 +1,6 @@
 ﻿using CommonTestUtilities.Requests;
 using Microsoft.AspNetCore.Http;
-using RecipeBook.Communiction.Requests;
+using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using System.Globalization;
 using System.Text.Json;
@@ -10,7 +10,7 @@ namespace WebApi.Test.Login.DoLogin
 {
     public class DoLoginTest : RecipeBookClassFixture
     {
-        private readonly string _method = "login";
+        private const string METHOD = "login";
 
         private readonly string _email;
         private readonly string _password;
@@ -28,11 +28,11 @@ namespace WebApi.Test.Login.DoLogin
         {
             RequestLoginJson request = new()
             {
-                Email = _email, 
+                Email = _email,
                 Password = _password
             };
 
-            HttpResponseMessage response = await DoPost(_method, request);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request);
 
             Assert.Equal(StatusCodes.Status200OK, (int)response.StatusCode);
 
@@ -60,7 +60,7 @@ namespace WebApi.Test.Login.DoLogin
         {
             RequestLoginJson request = RequestLoginJsonBuilder.Build();
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
 
@@ -84,7 +84,7 @@ namespace WebApi.Test.Login.DoLogin
             RequestLoginJson request = RequestLoginJsonBuilder.Build();
             request.Email = "";
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
 
@@ -108,7 +108,7 @@ namespace WebApi.Test.Login.DoLogin
             RequestLoginJson request = RequestLoginJsonBuilder.Build();
             request.Email = "email.com";
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
 
@@ -132,7 +132,7 @@ namespace WebApi.Test.Login.DoLogin
             RequestLoginJson request = RequestLoginJsonBuilder.Build();
             request.Password = "";
 
-            HttpResponseMessage response = await DoPost(_method, request, culture);
+            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
 
             Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
 

@@ -39,7 +39,7 @@ namespace CommonTestUtilities.Entities
                 .RuleFor(recipe => recipe.Instructions, f => f.Make(1, () => new Instruction()
                 {
                     ID = 1,
-                    Step = "1",
+                    Step = 1,
                     Text = f.Lorem.Paragraph()
                 }))
                 .RuleFor(recipe => recipe.DishTypes, f => f.Make(1, () => new RecipeBook.Domain.Entities.DishType()

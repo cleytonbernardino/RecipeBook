@@ -31,6 +31,13 @@ namespace WebApi.Test
             return await _httpClient.PutAsJsonAsync(method, request);
         }
 
+        protected async Task<HttpResponseMessage> DoDelete(string method, string token, string culture = "en")
+        {
+            ChangeRequestCulture(culture);
+            AddBearerToken(token);
+            return await _httpClient.DeleteAsync(method);
+        }
+
         protected static async Task<JsonElement> GetJsonElementAsync(HttpResponseMessage response)
         {
             await using Stream responseBody = await response.Content.ReadAsStreamAsync();

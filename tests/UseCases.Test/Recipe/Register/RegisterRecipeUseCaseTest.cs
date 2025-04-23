@@ -1,14 +1,9 @@
-﻿using AutoMapper;
-using CommonTestUtilities.Entities;
+﻿using CommonTestUtilities.Entities;
 using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Mapper;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.Recipe;
-using RecipeBook.Communication.Requests;
-using RecipeBook.Domain.Repositories;
-using RecipeBook.Domain.Repositories.Recipe;
-using RecipeBook.Domain.Services.LoggedUser;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 
@@ -21,10 +16,12 @@ namespace UseCases.Test.Recipe.Register
         {
             var user = UserBuilder.Build().user;
 
-            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRecipeJsonBuilder.Build();
 
-            RecipeUseCase useCase = CreateUseCase(user);
-            await useCase.Execute(request);
+            var useCase = CreateUseCase(user);
+            var result = await useCase.Execute(request);
+
+            Assert.Equal(request.Title, result.Title);
         }
 
         [Fact]
@@ -32,10 +29,10 @@ namespace UseCases.Test.Recipe.Register
         {
             var user = UserBuilder.Build().user;
 
-            RequestRecipeJson request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRecipeJsonBuilder.Build();
             request.Title = "";
 
-            RecipeUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
             async Task act() => await useCase.Execute(request);
 
             var exception = await Assert.ThrowsAnyAsync<ErrorOnValidationException>(act);
@@ -45,10 +42,10 @@ namespace UseCases.Test.Recipe.Register
 
         private static RecipeUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)
         {
-            ILoggedUser loggedUser = LoggedUserBuilder.Build(user);
-            IMapper mapper = MapperBuilder.Build();
-            IRecipeWriteOnlyRepository repository = RecipeWriteOnlyRepositoryBuilder.Build();
-            IUnitOfWork unitOfWork = UnitOfWorkBuilder.Build();
+            var loggedUser = LoggedUserBuilder.Build(user);
+            var mapper = MapperBuilder.Build();
+            var repository = RecipeWriteOnlyRepositoryBuilder.Build();
+            var unitOfWork = UnitOfWorkBuilder.Build();
 
             return new RecipeUseCase(loggedUser, mapper, repository, unitOfWork);
         }

@@ -52,7 +52,7 @@ namespace RecipeBook.Application.UserCases.Recipe.Filter
 
             if (!result.IsValid)
             {
-                var errMsg = result.Errors.Select(e => e.ErrorMessage).ToList();
+                var errMsg = result.Errors.Select(e => e.ErrorMessage).Distinct().ToList();
                 throw new ErrorOnValidationException(errMsg);
             }
         }

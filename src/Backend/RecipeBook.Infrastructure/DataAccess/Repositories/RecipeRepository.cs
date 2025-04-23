@@ -63,6 +63,17 @@ namespace RecipeBook.Infrastructure.DataAccess.Repositories
         public async Task<bool> IsValidRecipeOwner(User user, long recipeId) => 
             await _dbContext.Recipes.AnyAsync(recipe => recipe.ID == recipeId && recipe.UserId == user.ID && recipe.Active);
 
+        public async Task<IList<Recipe>> GetForDashbord(User user)
+        {
+            return await _dbContext.Recipes
+                .AsNoTracking()
+                .Include(recipe => recipe.Ingredients)
+                .Where(recipe => recipe.Active && recipe.UserId == user.ID)
+                .OrderByDescending(recipe => recipe.CreatedOn)
+                .Take(5)
+                .ToListAsync();
+        }
+
         public void Update(Recipe recipe) => _dbContext.Recipes.Update(recipe);
 
         public async Task Delete(long recipeId)

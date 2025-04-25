@@ -24,6 +24,8 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.OperationFilter<IdsFilter>();
 
+    options.SwaggerDoc("v1", new OpenApiInfo { Title = "RecipeBook", Version = "v1" });
+
     options.AddSecurityDefinition(TOKEN_PREFIX, new OpenApiSecurityScheme
     {
         Description = @"JWT Authorization header using the Bearer scheme.

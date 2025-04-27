@@ -1,6 +1,8 @@
 ﻿using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
+using Shouldly;
+using System.Net;
 using System.Text.Json;
+
 
 namespace WebApi.Test.User.Profile
 {
@@ -24,23 +26,21 @@ namespace WebApi.Test.User.Profile
         public async Task Success()
         {
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndetifier);
-            HttpResponseMessage response = await DoGet(METHOD, token);
-
-            Assert.Equal(StatusCodes.Status200OK, (int)response.StatusCode);
+            
+            var response = await DoGet(METHOD, token);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
 
             // Name
             var name = jsonElement.GetProperty("name").GetString();
-            Assert.NotNull(name);
-            Assert.NotEmpty(name!);
-            Assert.Equal(_name, name);
+            name.ShouldNotBeNullOrEmpty();
+            name.ShouldBe(_name);
 
             // Email
             var email = jsonElement.GetProperty("email").GetString();
-            Assert.NotNull(email);
-            Assert.NotEmpty(email!);
-            Assert.Equal(_email, email);
+            email.ShouldNotBeNullOrEmpty();
+            email.ShouldBe(_email);
         }
     }
 }

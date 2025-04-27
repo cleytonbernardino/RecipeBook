@@ -1,9 +1,9 @@
 ﻿using CommonTestUtilities.Requests;
-using Microsoft.AspNetCore.Http;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
-using System.Text.Json;
+using System.Net;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Login.DoLogin
@@ -32,121 +32,92 @@ namespace WebApi.Test.Login.DoLogin
                 Password = _password
             };
 
-            HttpResponseMessage response = await DoPost(method: METHOD, request: request);
+            var response = await DoPost(method: METHOD, request: request);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
-            Assert.Equal(StatusCodes.Status200OK, (int)response.StatusCode);
+            var jsonELement = await GetJsonElementAsync(response);
 
-            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
+            string? name = jsonELement.GetProperty("name").GetString();
 
-            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
-
-            string? name = responseData.RootElement.GetProperty("name").GetString();
-
-            string? accessToken = responseData.RootElement.GetProperty("tokens").GetProperty("accessToken").GetString();
+            string? accessToken = jsonELement.GetProperty("tokens").GetProperty("accessToken").GetString();
 
             // Name
-            Assert.NotNull(name);
-            Assert.NotEmpty(name);
-            Assert.Equal(_name, name);
+            name.ShouldNotBeNullOrEmpty();
+            name.ShouldBe(_name);
 
             // Tokens
-            Assert.NotNull(accessToken);
-            Assert.NotEmpty(accessToken);
+            accessToken.ShouldNotBeNullOrEmpty();
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Invalid_Login(string culture)
         {
-            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            var request = RequestLoginJsonBuilder.Build();
 
-            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
+            var response = await DoPost(method: METHOD, request: request, culture: culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
-
-            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
-
-            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
-
-            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
-
-            Assert.Equal(1, jsonData.GetArrayLength());
+            var errors = await GetErrorList(response);
 
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_OR_PASSWORD_INVALID", new CultureInfo(culture))!;
-
-            Assert.Equal(expectedMessage, jsonData[0].GetString());
+            
+            errors.ShouldHaveSingleItem();
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Email_Empty_Is_Returning_Correct_Error(string culture)
         {
-            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            var request = RequestLoginJsonBuilder.Build();
             request.Email = "";
 
-            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
+            var response = await DoPost(method: METHOD, request: request, culture: culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
-
-            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
-
-            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
-
-            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
-
-            Assert.Equal(1, jsonData.GetArrayLength());
+            var errors = await GetErrorList(response);
 
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_EMPTY", new CultureInfo(culture))!;
 
-            Assert.Equal(expectedMessage, jsonData[0].GetString());
+            errors.ShouldHaveSingleItem();
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Email_Invalid_Is_Returning_Correct_Error(string culture)
         {
-            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            var request = RequestLoginJsonBuilder.Build();
             request.Email = "email.com";
 
-            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
+            var response = await DoPost(method: METHOD, request: request, culture: culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
-
-            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
-
-            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
-
-            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
-
-            Assert.Equal(1, jsonData.GetArrayLength());
+            var errors = await GetErrorList(response);
 
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EMAIL_INVALID", new CultureInfo(culture))!;
 
-            Assert.Equal(expectedMessage, jsonData[0].GetString());
+            errors.ShouldHaveSingleItem();
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Erro_Password_Empty_Is_Returning_Correct_Error(string culture)
         {
-            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            var request = RequestLoginJsonBuilder.Build();
             request.Password = "";
 
-            HttpResponseMessage response = await DoPost(method: METHOD, request: request, culture: culture);
+            var response = await DoPost(method: METHOD, request: request, culture: culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            Assert.Equal(StatusCodes.Status400BadRequest, (int)response.StatusCode);
-
-            await using Stream responseBody = await response.Content.ReadAsStreamAsync();
-
-            JsonDocument responseData = await JsonDocument.ParseAsync(responseBody);
-
-            JsonElement jsonData = responseData.RootElement.GetProperty("errors");
-
-            Assert.Equal(1, jsonData.GetArrayLength());
-
+            var errors = await GetErrorList(response);
+            
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_EMPTY", new CultureInfo(culture))!;
 
-            Assert.Equal(expectedMessage, jsonData[0].GetString());
+            errors.ShouldHaveSingleItem();
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
     }
 }

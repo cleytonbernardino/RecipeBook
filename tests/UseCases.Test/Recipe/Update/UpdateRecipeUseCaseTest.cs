@@ -6,6 +6,7 @@ using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.Recipe.Update;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.Recipe.Update
 {
@@ -21,10 +22,9 @@ namespace UseCases.Test.Recipe.Update
             var request = RequestRecipeJsonBuilder.Build();
 
             var useCase = CreateUseCase(user, recipe);
-            await useCase.Execute(recipe.ID, request);
+            async Task act() => await useCase.Execute(recipe.ID, request);
 
-            // This Assert is so that the sonar cloud does not point it out as an error, the real test is to run the use case, without it breaking.
-            Assert.True(true);
+            await act().ShouldNotThrowAsync();
         }
 
         [Fact]
@@ -35,10 +35,10 @@ namespace UseCases.Test.Recipe.Update
             var request = RequestRecipeJsonBuilder.Build();
 
             var useCase = CreateUseCase(user);
-            async Task act() { await useCase.Execute(1000, request); };
+            async Task act() => await useCase.Execute(1000, request);
 
-            var exception = await Assert.ThrowsAsync<NotFoundException>(act);
-            Assert.Equal(ResourceMessagesException.RECIPE_NOT_FOUND, exception.Message);
+            var exception = await act().ShouldThrowAsync<NotFoundException>();
+            exception.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
         }
 
         [Fact]
@@ -52,13 +52,10 @@ namespace UseCases.Test.Recipe.Update
             request.Title = "";
 
             var useCase = CreateUseCase(user, recipe);
-            async Task act() { await useCase.Execute(recipe.ID, request); };
+            async Task act() => await useCase.Execute(recipe.ID, request);
 
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            var errors = exception.ErrorMessagens;
-
-            Assert.Single(errors);
-            Assert.Equal(ResourceMessagesException.TITLE_EMPTY, errors.First().ToString());
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.TITLE_EMPTY);
         }
 
         private static UpdateRecipeUseCase CreateUseCase(

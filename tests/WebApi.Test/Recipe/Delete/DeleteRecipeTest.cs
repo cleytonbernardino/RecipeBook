@@ -1,8 +1,9 @@
 ﻿using CommonTestUtilities.IdEncription;
 using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
+using System.Net;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Recipe.Delete
@@ -28,12 +29,10 @@ namespace WebApi.Test.Recipe.Delete
             string url = METHOD + _encriptedRecipeId;
 
             var response = await DoDelete(url, token);
-
-            Assert.Equal(StatusCodes.Status204NoContent, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
             response = await DoGet(url, token);
-
-            Assert.Equal(StatusCodes.Status404NotFound, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
         }
 
         [Theory]
@@ -46,14 +45,14 @@ namespace WebApi.Test.Recipe.Delete
             string url = METHOD + encriptedRecipeId;
 
             var response = await DoDelete(url, token, culture);
-
-            Assert.Equal(StatusCodes.Status404NotFound, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
 
             var errors = await GetErrorList(response);
-            Assert.Single(errors);
+            errors.ShouldHaveSingleItem();
 
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("RECIPE_NOT_FOUND", new CultureInfo(culture))!;
-            Assert.Equal(expectedMessage, errors.First().ToString());
+
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
     }
 }

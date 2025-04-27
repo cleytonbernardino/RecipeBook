@@ -1,10 +1,10 @@
 ﻿using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
-using System.Text.Json;
+using System.Net;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.User.ChangePassword
@@ -27,14 +27,13 @@ namespace WebApi.Test.User.ChangePassword
         [Fact]
         public async Task Success()
         {
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build();
+            var request = RequestChangePasswordJsonBuilder.Build();
             request.Password = _password;
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            HttpResponseMessage response = await DoPut(METHOD, request, token);
-
-            Assert.Equal(StatusCodes.Status204NoContent, ((int)response.StatusCode));
+            var response = await DoPut(METHOD, request, token);
+            response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
 
             // Trying to log in to verify that the password was actually changed
             RequestLoginJson loginRequest = new()
@@ -42,12 +41,12 @@ namespace WebApi.Test.User.ChangePassword
                 Email = _email,
                 Password = _password
             };
-            HttpResponseMessage loginResponse = await DoPost("login", loginRequest);
-            Assert.Equal(StatusCodes.Status401Unauthorized, ((int)loginResponse.StatusCode));
+            var loginResponse = await DoPost("login", loginRequest);
+            loginResponse.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
             loginRequest.Password = request.NewPassword;
             loginResponse = await DoPost("login", loginRequest);
-            Assert.Equal(StatusCodes.Status200OK, ((int)loginResponse.StatusCode));
+            loginResponse.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Theory]
@@ -62,38 +61,31 @@ namespace WebApi.Test.User.ChangePassword
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            HttpResponseMessage response = await DoPut(METHOD, request, token, culture);
+            var response = await DoPut(METHOD, request, token, culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            Assert.Equal(StatusCodes.Status400BadRequest, ((int)response.StatusCode));
-
-            JsonElement jsonElement = await GetJsonElementAsync(response);
-            var errors = jsonElement.GetProperty("errors").EnumerateArray();
-
-            Assert.Single(errors);
+            var errors = await GetErrorList(response);
+            errors.ShouldHaveSingleItem();
 
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_EMPTY", new CultureInfo(culture))!;
-            Assert.Equal(expectedMessage, errors.First().ToString());
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_CurrentPassword_Different(string culture)
         {
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build();
+            var request = RequestChangePasswordJsonBuilder.Build();
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            HttpResponseMessage response = await DoPut(METHOD, request, token, culture);
+            var response = await DoPut(METHOD, request, token, culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            Assert.Equal(StatusCodes.Status400BadRequest, ((int)response.StatusCode));
-
-            JsonElement jsonElement = await GetJsonElementAsync(response);
-            var errors = jsonElement.GetProperty("errors").EnumerateArray();
-
-            Assert.Single(errors);
+            var errors = await GetErrorList(response);
 
             string expectedMessage = ResourceMessagesException.ResourceManager.GetString("PASSWORD_DIFFERENT_FROM_CURRENT_PASSWORD", new CultureInfo(culture))!;
-            Assert.Equal(expectedMessage, errors.First().ToString());
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
     }
 }

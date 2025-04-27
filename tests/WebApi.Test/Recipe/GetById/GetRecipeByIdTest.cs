@@ -1,8 +1,9 @@
 ﻿using CommonTestUtilities.IdEncription;
 using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
+using System.Net;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Recipe.GetById
@@ -21,20 +22,19 @@ namespace WebApi.Test.Recipe.GetById
         }
 
         [Fact]
-        public async void Success()
+        public async Task Success()
         {
             string url = METHOD + _encripetedRecipeId;
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
             var response = await DoGet(url, token);
-
-            Assert.Equal(StatusCodes.Status200OK, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
         
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
-        public async void Error_Recipe_Not_Found(string culture)
+        public async Task Error_Recipe_Not_Found(string culture)
         {
             string encripetedRecipeId = IdEncripterBuilder.Build().Encode(1000);
 
@@ -43,14 +43,13 @@ namespace WebApi.Test.Recipe.GetById
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
             var response = await DoGet(url, token, culture);
-            Assert.Equal(StatusCodes.Status404NotFound, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.NotFound);
 
             var errors = await GetErrorList(response);
-
-            Assert.Single(errors);
+            errors.ShouldHaveSingleItem();
 
             var expectedMessage = ResourceMessagesException.ResourceManager.GetString("RECIPE_NOT_FOUND", new CultureInfo(culture));
-            Assert.Equal(expectedMessage, errors.First().ToString());
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
     }
 }

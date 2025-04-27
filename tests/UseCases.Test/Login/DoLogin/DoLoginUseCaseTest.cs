@@ -5,11 +5,9 @@ using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
 using RecipeBook.Application.UserCases.Login.DoLogin;
 using RecipeBook.Communication.Requests;
-using RecipeBook.Communication.Responses;
-using RecipeBook.Domain.Cryptography;
-using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.Login.DoLogin
 {
@@ -20,38 +18,39 @@ namespace UseCases.Test.Login.DoLogin
         {
             (var user, string password) = UserBuilder.Build();
 
-            DoLoginUseCase useCase = createUseCase(user);
+            var useCase = createUseCase(user);
 
-            ResponseResgisteredUserJson result = await useCase.Execute(new RequestLoginJson()
+            var result = await useCase.Execute(new RequestLoginJson()
             {
                 Email = user.Email,
                 Password = password
             });
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Tokens);
-            Assert.NotEmpty(result.Tokens.AccessToken);
-            Assert.Equal(user.Name, result.Name);
+            result.ShouldNotBeNull();
+            result.Tokens.ShouldNotBeNull();
+            result.Tokens.AccessToken.ShouldNotBeEmpty();
+            result.Name.ShouldBe(user.Name);
         }
 
         [Fact]
         public async Task Error_Invalid_User()
         {
-            RequestLoginJson request = RequestLoginJsonBuilder.Build();
+            var request = RequestLoginJsonBuilder.Build();
 
-            DoLoginUseCase useCase = createUseCase();
+            var useCase = createUseCase();
 
-            Func<Task> act = async () => { await useCase.Execute(request); };
+            async Task act() { await useCase.Execute(request); };
 
             var exception = await Assert.ThrowsAsync<InvalidLoginException>(act);
-            Assert.Equal(exception.Message, ResourceMessagesException.EMAIL_OR_PASSWORD_INVALID);
+
+            exception.Message.ShouldBe(ResourceMessagesException.EMAIL_OR_PASSWORD_INVALID);
         }
 
         private static DoLoginUseCase createUseCase(RecipeBook.Domain.Entities.User? user = null)
         {
-            IPasswordEncripter passwordEncripty = PasswordEncripterBuilder.Build();
+            var passwordEncripty = PasswordEncripterBuilder.Build();
             UserReadOnlyRepositoryBuilder readOnlyRepository = new();
-            IAccessTokenGenerator accessToken = JwtTokenGeneratorBuilder.Build();
+            var accessToken = JwtTokenGeneratorBuilder.Build();
 
             if (user is not null)
                 readOnlyRepository.GetByEmailAndPassword(user);

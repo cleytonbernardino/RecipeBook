@@ -3,12 +3,9 @@ using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.Update;
-using RecipeBook.Communication.Requests;
-using RecipeBook.Domain.Repositories;
-using RecipeBook.Domain.Repositories.User;
-using RecipeBook.Domain.Services.LoggedUser;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.User.Update
 {
@@ -19,68 +16,63 @@ namespace UseCases.Test.User.Update
         {
             var user = UserBuilder.Build().user;
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            UpdateUserUseCase useCase = CreateUseCase(user);
+            var request = RequestUpdateUserJsonBuilder.Build();
+            var useCase = CreateUseCase(user);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            await act();
-            Assert.Equal(user.Name, request.Name);
-            Assert.Equal(user.Email, request.Email);
+            await act().ShouldNotThrowAsync();
+
+            request.Name.ShouldBe(user.Name);
+            request.Email.ShouldBe(user.Email);
         }
 
         [Fact]
         public async Task Error_Name_Empty()
         {
             var user = UserBuilder.Build().user;
-            string originalName = user.Name;
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
             request.Name = "";
 
-            UpdateUserUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(ResourceMessagesException.NAME_EMPTY, exception.ErrorMessagens[0]);
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.NAME_EMPTY);
         }
 
         [Fact]
         public async Task Erro_Email_Empty()
         {
             var user = UserBuilder.Build().user;
-            string originalName = user.Name;
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
             request.Email = "";
 
-            UpdateUserUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(ResourceMessagesException.EMAIL_EMPTY, exception.ErrorMessagens[0]);
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.EMAIL_EMPTY);
         }
 
         [Fact]
         public async Task Erro_Email_Invalid()
         {
             var user = UserBuilder.Build().user;
-            string originalName = user.Name;
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
             request.Email = "email.com";
 
-            UpdateUserUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(ResourceMessagesException.EMAIL_INVALID, exception.ErrorMessagens[0]);
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.EMAIL_INVALID);
         }
 
         [Fact]
@@ -88,27 +80,26 @@ namespace UseCases.Test.User.Update
         {
             var user = UserBuilder.Build().user;
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            UpdateUserUseCase useCase = CreateUseCase(user, request.Email);
+            var request = RequestUpdateUserJsonBuilder.Build();
+            var useCase = CreateUseCase(user, request.Email);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
             // Errors
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(ResourceMessagesException.EMAIL_IN_USE, exception.ErrorMessagens[0]);
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.EMAIL_IN_USE);
 
             // Validation
-            Assert.NotEqual(user.Name, request.Name);
-            Assert.NotEqual(user.Email, request.Email);
+            request.Name.ShouldNotBe(user.Name);
+            request.Email.ShouldNotBe(user.Email);
         }
 
         private static UpdateUserUseCase CreateUseCase(RecipeBook.Domain.Entities.User user, string? email = null)
         {
-            ILoggedUser loggedUser = LoggedUserBuilder.Build(user);
-            UserReadOnlyRepositoryBuilder userReadOnly = new UserReadOnlyRepositoryBuilder();
-            IUserUpdateOnlyRepository userWriteOnly = new UserUpdateOnlyRepositoryBuilder().GetById(user).Build();
-            IUnitOfWork unitOfWork = UnitOfWorkBuilder.Build();
+            var loggedUser = LoggedUserBuilder.Build(user);
+            var userReadOnly = new UserReadOnlyRepositoryBuilder();
+            var userWriteOnly = new UserUpdateOnlyRepositoryBuilder().GetById(user).Build();
+            var unitOfWork = UnitOfWorkBuilder.Build();
 
             if (!string.IsNullOrEmpty(email))
                 userReadOnly.ExistActiveUserWithEmail(email);

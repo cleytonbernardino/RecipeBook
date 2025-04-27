@@ -6,6 +6,7 @@ using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.Recipe.Register
 {
@@ -21,7 +22,7 @@ namespace UseCases.Test.Recipe.Register
             var useCase = CreateUseCase(user);
             var result = await useCase.Execute(request);
 
-            Assert.Equal(request.Title, result.Title);
+            result.Title.ShouldBe(request.Title);
         }
 
         [Fact]
@@ -35,9 +36,8 @@ namespace UseCases.Test.Recipe.Register
             var useCase = CreateUseCase(user);
             async Task act() => await useCase.Execute(request);
 
-            var exception = await Assert.ThrowsAnyAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(ResourceMessagesException.TITLE_EMPTY, exception.ErrorMessagens[0].ToString());
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.TITLE_EMPTY);
         }
 
         private static RecipeUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)

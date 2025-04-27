@@ -2,7 +2,7 @@
 using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Mapper;
 using RecipeBook.Application.UserCases.User.Profile;
-using RecipeBook.Communication.Responses;
+using Shouldly;
 
 namespace UseCases.Test.User.Profile
 {
@@ -13,13 +13,13 @@ namespace UseCases.Test.User.Profile
         {
             var user = UserBuilder.Build().user;
 
-            GetUserProfileUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
 
-            ResponseUserProfileJson result = await useCase.Execute();
+            var result = await useCase.Execute();
 
-            Assert.NotNull(result);
-            Assert.Equal(user.Name, result.Name);
-            Assert.Equal(user.Email, result.Email);
+            result.ShouldNotBeNull();
+            result.Name.ShouldBe(user.Name);
+            result.Email.ShouldBe(user.Email);
         }
 
         private static GetUserProfileUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)

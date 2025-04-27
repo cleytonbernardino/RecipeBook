@@ -1,7 +1,8 @@
 ﻿using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
+using System.Net;
 using System.Text.Json;
 using WebApi.Test.InlineData;
 
@@ -23,13 +24,13 @@ namespace WebApi.Test.Dashboard
         public async Task Error_Invalid_Token(string culture)
         {
             var response = await DoGet(METHOD, token: "TokenInvalid", culture);
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
             var erros = await GetErrorList(response);
-            Assert.Single(erros);
-
             string expected_message = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, erros.First().ToString());
+
+            erros.ShouldHaveSingleItem();
+            erros.First().ToString().ShouldBe(expected_message);
         }
 
         [Theory]
@@ -37,15 +38,13 @@ namespace WebApi.Test.Dashboard
         public async Task Error_Without_Token(string culture)
         {
             var response = await DoGet(METHOD, token: "", culture);
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            JsonElement jsonElement = await GetJsonElementAsync(response);
-
-            var erros = jsonElement.GetProperty("errors").EnumerateArray();
-            Assert.Single(erros);
-
+            var erros = await GetErrorList(response);
             string expected_message = ResourceMessagesException.ResourceManager.GetString("NO_TOKEN", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, erros.First().ToString());
+
+            erros.ShouldHaveSingleItem();
+            erros.First().ToString().ShouldBe(expected_message);
         }
 
         [Theory]
@@ -55,15 +54,13 @@ namespace WebApi.Test.Dashboard
             string token = JwtTokenGeneratorBuilder.Build().Generate(Guid.NewGuid());
 
             var response = await DoGet(METHOD, token, culture);
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            JsonElement jsonElement = await GetJsonElementAsync(response);
-
-            var erros = jsonElement.GetProperty("errors").EnumerateArray();
-            Assert.Single(erros);
-
+            var erros = await GetErrorList(response);
             string expected_message = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, erros.First().ToString());
+
+            erros.ShouldHaveSingleItem();
+            erros.First().ToString().ShouldBe(expected_message);
         }
 
         [Theory]
@@ -73,16 +70,16 @@ namespace WebApi.Test.Dashboard
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier, true);
 
             var response = await DoGet(METHOD, token, culture);
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
             JsonElement jsonElement = await GetJsonElementAsync(response);
 
             // MsgError
             var errors = jsonElement.GetProperty("errors").EnumerateArray();
-            Assert.Single(errors);
-
             string expected_message = ResourceMessagesException.ResourceManager.GetString("EXPIRED_TOKEN", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, errors.First().ToString());
+            
+            errors.ShouldHaveSingleItem();
+            errors.First().ToString().ShouldBe(expected_message);
 
             // Status Expired
             bool tokenIsExpiredors = jsonElement.GetProperty("tokenIsExpired").GetBoolean();

@@ -22,7 +22,7 @@ namespace WebApi.Test.Dashboard
 
             var response = await DoGet(METHOD, token);
 
-            response.StatusCode.ShouldBeEquivalentTo(HttpStatusCode.OK);
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
 
             var responseData = await GetJsonElementAsync(response);
 

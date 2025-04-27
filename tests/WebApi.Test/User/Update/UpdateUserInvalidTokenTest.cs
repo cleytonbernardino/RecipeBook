@@ -1,10 +1,9 @@
 ﻿using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
-using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
-using System.Text.Json;
+using System.Net;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.User.Update
@@ -24,34 +23,32 @@ namespace WebApi.Test.User.Update
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Invalid_Token(string culture)
         {
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            HttpResponseMessage response = await DoPut(METHOD, request, "TokenInvalid", culture);
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            var request = RequestUpdateUserJsonBuilder.Build();
 
-            JsonElement jsonElement = await GetJsonElementAsync(response);
+            var response = await DoPut(METHOD, request, "TokenInvalid", culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            var erros = jsonElement.GetProperty("errors").EnumerateArray();
-            Assert.Single(erros);
+            var errors = await GetErrorList(response);
+            errors.ShouldHaveSingleItem();
 
-            string expected_message = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, erros.First().ToString());
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Without_Token(string culture)
         {
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            HttpResponseMessage response = await DoPut(METHOD, request, "", culture);
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            var request = RequestUpdateUserJsonBuilder.Build();
 
-            JsonElement jsonElement = await GetJsonElementAsync(response);
-            var erros = jsonElement.GetProperty("errors").EnumerateArray();
+            var response = await DoPut(METHOD, request, "", culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            Assert.Single(erros);
+            var errors = await GetErrorList(response);
+            errors.ShouldHaveSingleItem();
 
-            string expected_message = ResourceMessagesException.ResourceManager.GetString("NO_TOKEN", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, erros.First().ToString());
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("NO_TOKEN", new CultureInfo(culture))!;
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
@@ -60,18 +57,16 @@ namespace WebApi.Test.User.Update
         {
             string token = JwtTokenGeneratorBuilder.Build().Generate(Guid.NewGuid());
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            HttpResponseMessage response = await DoPut(METHOD, request, token, culture);
+            var request = RequestUpdateUserJsonBuilder.Build();
 
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            var response = await DoPut(METHOD, request, token, culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            JsonElement jsonElement = await GetJsonElementAsync(response);
-            var erros = jsonElement.GetProperty("errors").EnumerateArray();
+            var errors = await GetErrorList(response);
+            errors.ShouldHaveSingleItem();
 
-            Assert.Single(erros);
-
-            string expected_message = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, erros.First().ToString());
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("USER_DOES_NOT_HAVE_PERMISSION", new CultureInfo(culture))!;
+            errors.First().ToString().ShouldBe(expectedMessage);
         }
 
         [Theory]
@@ -80,23 +75,23 @@ namespace WebApi.Test.User.Update
         {
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier, true);
 
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
-            HttpResponseMessage response = await DoPut(METHOD, request, token, culture);
+            var request = RequestUpdateUserJsonBuilder.Build();
 
-            Assert.Equal(StatusCodes.Status401Unauthorized, (int)response.StatusCode);
+            var response = await DoPut(METHOD, request, token, culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.Unauthorized);
 
-            JsonElement jsonElement = await GetJsonElementAsync(response);
+            var jsonElement = await GetJsonElementAsync(response);
 
             // MsgError
             var errors = jsonElement.GetProperty("errors").EnumerateArray();
-            Assert.Single(errors);
+            errors.ShouldHaveSingleItem();
 
-            string expected_message = ResourceMessagesException.ResourceManager.GetString("EXPIRED_TOKEN", new CultureInfo(culture))!;
-            Assert.Equal(expected_message, errors.First().ToString());
+            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("EXPIRED_TOKEN", new CultureInfo(culture))!;
+            errors.First().ToString().ShouldBe(expectedMessage);
 
             // Status Expired
-            bool tokenIsExpiredors = jsonElement.GetProperty("tokenIsExpired").GetBoolean();
-            Assert.True(tokenIsExpiredors);
+            bool tokenIsExpired = jsonElement.GetProperty("tokenIsExpired").GetBoolean();
+            tokenIsExpired.ShouldBeTrue();
         }
     }
 }

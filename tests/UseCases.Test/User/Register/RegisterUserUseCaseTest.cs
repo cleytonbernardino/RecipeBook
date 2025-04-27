@@ -1,12 +1,12 @@
-﻿    using CommonTestUtilities.Cryptography;
+﻿using CommonTestUtilities.Cryptography;
 using CommonTestUtilities.Mapper;
 using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
 using RecipeBook.Application.UserCases.User.Register;
-using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.User.Register
 {
@@ -15,44 +15,42 @@ namespace UseCases.Test.User.Register
         [Fact]
         public async Task Success()
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            var request = RequestUserJsonBuilder.Build();
 
-            RegisterUserUseCase useCase = CreateUseCase();
+            var useCase = CreateUseCase();
             var result = await useCase.Execute(request);
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Tokens);
-            Assert.NotEmpty(result.Tokens.AccessToken);
-            Assert.Equal(result.Name, request.Name);
+            result.ShouldNotBeNull();
+            result.Tokens.ShouldNotBeNull();
+            result.Tokens.AccessToken.ShouldNotBeNullOrEmpty();
+            result.Name.ShouldBe(request.Name);
         }
 
         [Fact]
         public async Task Erro_Email_Already_Registered()
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            var request = RequestUserJsonBuilder.Build();
 
-            RegisterUserUseCase useCase = CreateUseCase(request.Email);
+            var useCase = CreateUseCase(request.Email);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(exception.ErrorMessagens[0], ResourceMessagesException.EMAIL_IN_USE);
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.EMAIL_IN_USE);
         }
 
         [Fact]
         public async Task Error_Name_Empty()
         {
-            RequestRegisterUserJson request = RequestUserJsonBuilder.Build();
+            var request = RequestUserJsonBuilder.Build();
             request.Name = "";
 
-            RegisterUserUseCase useCase = CreateUseCase();
+            var useCase = CreateUseCase();
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            var exception = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
-            Assert.Single(exception.ErrorMessagens);
-            Assert.Equal(exception.ErrorMessagens[0], ResourceMessagesException.NAME_EMPTY);
+            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.NAME_EMPTY);
         }
 
         private static RegisterUserUseCase CreateUseCase(string? email = null)

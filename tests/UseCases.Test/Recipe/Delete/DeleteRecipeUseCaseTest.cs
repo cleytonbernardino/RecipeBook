@@ -4,6 +4,7 @@ using CommonTestUtilities.Repositories;
 using RecipeBook.Application.UserCases.Recipe.Delete;
 using RecipeBook.Exceptions.ExceptionsBase;
 using RecipeBook.Exceptions;
+using Shouldly;
 
 namespace UseCases.Test.Recipe.Delete
 {
@@ -17,10 +18,9 @@ namespace UseCases.Test.Recipe.Delete
 
             var useCase = CreateUseCase(user, recipe);
 
-            await useCase.Execute(recipe.ID);
+            async Task act() { await useCase.Execute(recipe.ID); };
 
-            // This Assert is so that the sonar cloud does not point it out as an error, the real test is to run the use case, without it breaking.
-            Assert.True(true);
+            await act().ShouldNotThrowAsync();
         }
 
         [Fact]
@@ -29,11 +29,12 @@ namespace UseCases.Test.Recipe.Delete
             var user = UserBuilder.Build().user;
 
             var useCase = CreateUseCase(user);
+
             async Task act() { await useCase.Execute(1000); };
 
-            var result = await Assert.ThrowsAsync<NotFoundException>(act);
+            var result = await act().ShouldThrowAsync(typeof(NotFoundException));
+            result.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
 
-            Assert.Equal(ResourceMessagesException.RECIPE_NOT_FOUND, result.Message);
         }
 
         private static DeleteRecipeUseCase CreateUseCase(RecipeBook.Domain.Entities.User user, RecipeBook.Domain.Entities.Recipe? recipe = null)

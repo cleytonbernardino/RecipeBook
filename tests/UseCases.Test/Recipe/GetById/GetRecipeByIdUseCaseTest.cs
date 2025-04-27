@@ -5,6 +5,7 @@ using CommonTestUtilities.Repositories;
 using RecipeBook.Application.UserCases.Recipe.GetById;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.Recipe.GetById
 {
@@ -19,10 +20,9 @@ namespace UseCases.Test.Recipe.GetById
             var useCase = CreateUseCase(user, recipe);
             var result = await useCase.Execute(recipe.ID);
 
-            Assert.NotNull(result);
-            Assert.NotNull(result.Id);
-            Assert.NotEmpty(result.Id);
-            Assert.Equal(recipe.Title, result.Title);
+            result.ShouldNotBeNull();
+            result.Id.ShouldNotBeNullOrEmpty();
+            result.Title.ShouldBe(recipe.Title);
         }
 
         [Fact]
@@ -34,8 +34,8 @@ namespace UseCases.Test.Recipe.GetById
             var useCase = CreateUseCase(user, recipe);
             async Task act() { await useCase.Execute(recipe.ID + 1); }
 
-            var errors = await Assert.ThrowsAsync<NotFoundException>(act);
-            Assert.Equal(ResourceMessagesException.RECIPE_NOT_FOUND, errors.Message);
+            var exeption = await act().ShouldThrowAsync<NotFoundException>();
+            exeption.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
         }
 
         private static GetRecipeByIdUseCase CreateUseCase(

@@ -1,10 +1,11 @@
 ﻿using CommonTestUtilities.Requests;
 using CommonTestUtilities.Tokens;
-using Microsoft.AspNetCore.Http;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Domain.Enums;
 using RecipeBook.Exceptions;
+using Shouldly;
 using System.Globalization;
+using System.Net;
 using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Recipe.Filter
@@ -42,40 +43,40 @@ namespace WebApi.Test.Recipe.Filter
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            HttpResponseMessage response = await DoPost(METHOD, request, token);
+            var response = await DoPost(METHOD, request, token);
 
-            Assert.Equal(StatusCodes.Status200OK, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.OK);
         }
 
         [Fact]
         public async Task Success_NoContent()
         {
-            RequestFilterRecipeJson request = RequestFilterRecipeJsonBuilder.Build();
+            var request = RequestFilterRecipeJsonBuilder.Build();
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            HttpResponseMessage response = await DoPost(METHOD, request, token);
+            var response = await DoPost(METHOD, request, token);
 
-            Assert.Equal(StatusCodes.Status204NoContent, ((int)response.StatusCode));
+            response.StatusCode.ShouldBe(HttpStatusCode.NoContent);
         }
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_CookingTime_Invalid(string culture)
         {
-            RequestFilterRecipeJson request = RequestFilterRecipeJsonBuilder.Build();
+            var request = RequestFilterRecipeJsonBuilder.Build();
             request.CookingTimes.Add((RecipeBook.Communication.Enums.CookingTime)1000);
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            HttpResponseMessage response = await DoPost(METHOD, request, token, culture);
-            Assert.Equal(StatusCodes.Status400BadRequest, ((int)response.StatusCode));
+            var response = await DoPost(METHOD, request, token, culture);
+            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
+            errors.ShouldHaveSingleItem();
 
-            Assert.Single(errors);
             string errorMessage = ResourceMessagesException.ResourceManager.GetString("COOKING_TIME_NOT_SUPPORTED", new CultureInfo(culture))!;
-            Assert.Equal(errorMessage, errors.First().ToString());
+            errors.First().ToString().ShouldBe(errorMessage);
         }
     }
 }

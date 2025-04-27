@@ -45,6 +45,9 @@ namespace WebApi.Test
             return responseData.RootElement;
         }
 
+        /// <summary>
+        /// This method returns all errors in the response, it looks for the 'errors' key within the json.
+        /// </summary>
         protected static async Task<JsonElement.ArrayEnumerator> GetErrorList(HttpResponseMessage response)
         {
             JsonElement jsonElement = await GetJsonElementAsync(response);

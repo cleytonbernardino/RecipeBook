@@ -1,6 +1,7 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.Update;
-using RecipeBook.Communication.Requests;
+using RecipeBook.Exceptions;
+using Shouldly;
 
 namespace Validators.Test.User.Update
 {
@@ -9,51 +10,51 @@ namespace Validators.Test.User.Update
         [Fact]
         public void Success()
         {
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
 
             UpdateUserValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.True(result.IsValid);
+            result.IsValid.ShouldBeTrue();
         }
 
         [Fact]
         public void Error_Name_Empty()
         {
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
             request.Name = "";
 
             UpdateUserValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.False(result.IsValid);
-            Assert.Single(result.Errors);
+            result.IsValid.ShouldBeFalse();
+            result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessagesException.NAME_EMPTY);
         }
 
         [Fact]
         public void Error_Email_Empty()
         {
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
             request.Email = "";
 
             UpdateUserValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.False(result.IsValid);
-            Assert.Single(result.Errors);
+            result.IsValid.ShouldBeFalse();
+            result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessagesException.EMAIL_EMPTY);
         }
 
         [Fact]
         public void Error_Email_Invalid()
         {
-            RequestUpdateUserJson request = RequestUpdateUserJsonBuilder.Build();
+            var request = RequestUpdateUserJsonBuilder.Build();
             request.Email = "email.com";
 
             UpdateUserValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.False(result.IsValid);
-            Assert.Single(result.Errors);
+            result.IsValid.ShouldBeFalse();
+            result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessagesException.EMAIL_INVALID);
         }
     }
 }

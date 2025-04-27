@@ -5,11 +5,9 @@ using CommonTestUtilities.Repositories;
 using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.ChangePassword;
 using RecipeBook.Communication.Requests;
-using RecipeBook.Domain.Cryptography;
-using RecipeBook.Domain.Repositories;
-using RecipeBook.Domain.Repositories.User;
-using RecipeBook.Domain.Services.LoggedUser;
+using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using Shouldly;
 
 namespace UseCases.Test.User.ChangePassword
 {
@@ -20,16 +18,16 @@ namespace UseCases.Test.User.ChangePassword
         {
             (var user, string password) = UserBuilder.Build();
 
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build();
+            var request = RequestChangePasswordJsonBuilder.Build();
             request.Password = password;
 
-            ChangePasswordUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
             await useCase.Execute(request);
 
-            IPasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
+            var passwordEncripter = PasswordEncripterBuilder.Build();
             string encriptedPassword = passwordEncripter.Encript(request.NewPassword);
 
-            Assert.Equal(user.Password, encriptedPassword);
+            encriptedPassword.ShouldBe(user.Password);
         }
 
         [Fact]
@@ -43,17 +41,17 @@ namespace UseCases.Test.User.ChangePassword
                 NewPassword = ""
             };
 
-            ChangePasswordUseCase useCase = CreateUseCase(user);
-            Func<Task> act = async () => await useCase.Execute(request);
+            var useCase = CreateUseCase(user);
+            async Task act() => await useCase.Execute(request);
 
-            var exceptions = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+            var exceptions = await act().ShouldThrowAsync<ErrorOnValidationException>();
 
-            Assert.Single(exceptions.ErrorMessagens);
+            exceptions.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.PASSWORD_EMPTY);
 
-            IPasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
+            var passwordEncripter = PasswordEncripterBuilder.Build();
             string encriptedPassword = passwordEncripter.Encript(request.NewPassword);
 
-            Assert.NotEqual(user.Password, encriptedPassword);
+            exceptions.ErrorMessagens.ShouldHaveSingleItem().ShouldNotBe(encriptedPassword);
         }
 
         [Fact]
@@ -61,28 +59,27 @@ namespace UseCases.Test.User.ChangePassword
         {
             (var user, string password) = UserBuilder.Build();
 
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build();
+            var request = RequestChangePasswordJsonBuilder.Build();
 
-            ChangePasswordUseCase useCase = CreateUseCase(user);
+            var useCase = CreateUseCase(user);
 
-            Func<Task> act = async () => await useCase.Execute(request);
+            async Task act() => await useCase.Execute(request);
 
-            var exceptions = await Assert.ThrowsAsync<ErrorOnValidationException>(act);
+            var exceptions = await act().ShouldThrowAsync<ErrorOnValidationException>();
 
-            Assert.Single(exceptions.ErrorMessagens);
-
-            IPasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
+            var passwordEncripter = PasswordEncripterBuilder.Build();
             string encriptedPassword = passwordEncripter.Encript(request.NewPassword);
 
-            Assert.NotEqual(user.Password, encriptedPassword);
+            exceptions.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.PASSWORD_DIFFERENT_FROM_CURRENT_PASSWORD);
+            encriptedPassword.ShouldNotBe(user.Password);
         }
 
         private static ChangePasswordUseCase CreateUseCase(RecipeBook.Domain.Entities.User user)
         {
-            ILoggedUser loggedUserInterface = LoggedUserBuilder.Build(user);
-            IUserUpdateOnlyRepository repository = new UserUpdateOnlyRepositoryBuilder().GetById(user).Build();
-            IPasswordEncripter passwordEncripter = PasswordEncripterBuilder.Build();
-            IUnitOfWork unitOfWork = UnitOfWorkBuilder.Build();
+            var loggedUserInterface = LoggedUserBuilder.Build(user);
+            var repository = new UserUpdateOnlyRepositoryBuilder().GetById(user).Build();
+            var passwordEncripter = PasswordEncripterBuilder.Build();
+            var unitOfWork = UnitOfWorkBuilder.Build();
 
             return new ChangePasswordUseCase(loggedUserInterface, repository, passwordEncripter, unitOfWork);
         }

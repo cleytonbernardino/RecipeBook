@@ -1,7 +1,7 @@
 ﻿using CommonTestUtilities.Requests;
 using RecipeBook.Application.UserCases.User.ChangePassword;
-using RecipeBook.Communication.Requests;
 using RecipeBook.Exceptions;
+using Shouldly;
 using Validators.Test.InlineData;
 
 namespace Validators.Test.User.ChangePassword
@@ -11,40 +11,38 @@ namespace Validators.Test.User.ChangePassword
         [Fact]
         public void Success()
         {
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build();
+            var request = RequestChangePasswordJsonBuilder.Build();
 
             ChangePasswordValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.True(result.IsValid);
+            result.IsValid.ShouldBeTrue();
         }
 
         [Fact]
         public void Error_NewPassword_Empty()
         {
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build();
+            var request = RequestChangePasswordJsonBuilder.Build();
             request.NewPassword = "";
 
             ChangePasswordValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.False(result.IsValid);
-            Assert.Single(result.Errors);
-            Assert.Equal(ResourceMessagesException.PASSWORD_EMPTY, result.Errors[0].ToString());
+            result.IsValid.ShouldBeFalse();
+            result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessagesException.PASSWORD_EMPTY);
         }
 
         [Theory]
         [ClassData(typeof(InlinePasswordMaxLenght))]
         public void Error_NewPassword_Invalid(int passwordLength)
         {
-            RequestChangePasswordJson request = RequestChangePasswordJsonBuilder.Build(passwordLength);
+            var request = RequestChangePasswordJsonBuilder.Build(passwordLength);
 
             ChangePasswordValidator validator = new();
             var result = validator.Validate(request);
 
-            Assert.False(result.IsValid);
-            Assert.Single(result.Errors);
-            Assert.Equal(ResourceMessagesException.PASSWORD_LENGTH_INVALID, result.Errors[0].ToString());
+            result.IsValid.ShouldBeFalse();
+            result.Errors.ShouldHaveSingleItem().ErrorMessage.ShouldBe(ResourceMessagesException.PASSWORD_LENGTH_INVALID);
         }
     }
 }

@@ -189,4 +189,13 @@
   <data name="RECIPE_NOT_FOUND" xml:space="preserve">
     <value>Recipe not found.</value>
   </data>
+  <data name="INVALID_NUMBER_INGREDIENTS" xml:space="preserve">
+    <value>Invalid number of ingredients.</value>
+  </data>
+  <data name="DUPLICATE_INGREDIENT_IN_LIST" xml:space="preserve">
+    <value>There are duplicate Ingredients in the list.</value>
+  </data>
+  <data name="INGREDIENT_NOT_FOLLOWING_PATTERN" xml:space="preserve">
+    <value>Ingredient not following pattern.</value>
+  </data>
 </root>

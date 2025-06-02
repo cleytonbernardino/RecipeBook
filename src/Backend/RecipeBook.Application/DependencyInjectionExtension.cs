@@ -5,6 +5,7 @@ using RecipeBook.Application.UserCases.Dashbord;
 using RecipeBook.Application.UserCases.Login.DoLogin;
 using RecipeBook.Application.UserCases.Recipe.Delete;
 using RecipeBook.Application.UserCases.Recipe.Filter;
+using RecipeBook.Application.UserCases.Recipe.Generate;
 using RecipeBook.Application.UserCases.Recipe.GetById;
 using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Application.UserCases.Recipe.Update;
@@ -58,6 +59,7 @@ namespace RecipeBook.Application
             services.AddScoped<IUpdateRecipeUseCase, UpdateRecipeUseCase>();
             services.AddScoped<IDeleteRecipeUseCase, DeleteRecipeUseCase>();
             services.AddScoped<IDashboardUseCase, DashboardUseCase>();
+            services.AddScoped<IGenerateRecipeUseCase, GenerateRecipeUseCase>();
         }
     }
 }

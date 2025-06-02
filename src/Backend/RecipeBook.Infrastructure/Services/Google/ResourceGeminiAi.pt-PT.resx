@@ -117,85 +117,23 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="EMAIL_EMPTY" xml:space="preserve">
-    <value>Email não pode está vazio.</value>
+  <data name="STARTING_GENERATE_RECIPE" xml:space="preserve">
+    <value>És um chef que conhece muitas receitas saborosas. Quando o utilizador te fornecer uma lista de ingredientes separados por ';',
+responderás com apenas uma receita que seja fácil de criar com os ingredientes fornecidos.
+
+Criarás uma receita com a seguinte estrutura e ordem:
+
+[Nome da Receita]
+
+[tempo necessário para a preparar, em que 0 significa menos de 10 minutos, 1 significa entre 10 e 30 minutos, 2 significa entre 30 e 60 minutos ou 3 significa mais de 60 minutos]
+
+[Lista de ingredientes fornecidos e os adicionados por ti separados por ';']
+
+[Instruções passo a passo para preparar a receita em apenas uma linha, por ordem e separadas por '@']
+
+Por favor, não adiciones mais texto do que o solicitado.</value>
   </data>
-  <data name="EMAIL_INVALID" xml:space="preserve">
-    <value>Email inválido.</value>
-  </data>
-  <data name="EMAIL_IN_USE" xml:space="preserve">
-    <value>O Email já foi registado</value>
-  </data>
-  <data name="EMAIL_OR_PASSWORD_INVALID" xml:space="preserve">
-    <value>Email ou password inválido.</value>
-  </data>
-  <data name="TITLE_EMPTY" xml:space="preserve">
-    <value>O titulo não pode está em vazio.</value>
-  </data>
-  <data name="EXPIRED_TOKEN" xml:space="preserve">
-    <value>Token expirado.</value>
-  </data>
-  <data name="NAME_EMPTY" xml:space="preserve">
-    <value>Nome não pode está vazio.</value>
-  </data>
-  <data name="NO_TOKEN" xml:space="preserve">
-    <value>Nenhum token foi encontrado na requisição.</value>
-  </data>
-  <data name="PASSWORD_DIFFERENT_FROM_CURRENT_PASSWORD" xml:space="preserve">
-    <value>Palavra-passe diferente da palavra-passe atual.</value>
-  </data>
-  <data name="PASSWORD_EMPTY" xml:space="preserve">
-    <value>A palavra-passe não pode está em branco.</value>
-  </data>
-  <data name="PASSWORD_LENGTH_INVALID" xml:space="preserve">
-    <value>A palavra-passe deve ter pelo menos 6 caracteres.</value>
-  </data>
-  <data name="UNKNOWN_ERROR" xml:space="preserve">
-    <value>Erro desconhecido</value>
-  </data>
-  <data name="USER_DOES_NOT_HAVE_PERMISSION" xml:space="preserve">
-    <value>O utilizador não tem permissão para aceder a esse recurso.</value>
-  </data>
-  <data name="COOKING_TIME_NOT_SUPPORTED" xml:space="preserve">
-    <value>Tempo de cozedura não suportado.</value>
-  </data>
-  <data name="DIFFICULTY_NOT_SUPPORTED" xml:space="preserve">
-    <value>Dificuldade não suportada.</value>
-  </data>
-  <data name="MUST_CONTAIN_ONE_INGREDIENT" xml:space="preserve">
-    <value>Deve conter um ingrediente no mínimo.</value>
-  </data>
-  <data name="MUST_CONTAIN_AN_INSTRUCTION" xml:space="preserve">
-    <value>Deve conter uma instrução pelo menos.</value>
-  </data>
-  <data name="DISH_TYPE_NOT_SUPPORTED" xml:space="preserve">
-    <value>Tipo de prato não suportado.</value>
-  </data>
-  <data name="INGREDIENT_EMPTY" xml:space="preserve">
-    <value>Ingrediente vazio.</value>
-  </data>
-  <data name="NO_NEGATIVE_INSTRUCTION_STEP" xml:space="preserve">
-    <value>Sem instrução negativa de passo.</value>
-  </data>
-  <data name="INSTRUCTION_EMPTY" xml:space="preserve">
-    <value>Instrução vazia.</value>
-  </data>
-  <data name="INSTRUCTION_EXCEEDS_MAXIMUM_SIZE" xml:space="preserve">
-    <value>A instrução excede o tamanho máximo.</value>
-  </data>
-  <data name="TWO_OR_MORE_INSTRUCTIONS_HAVE_THE_SAME_ORDER" xml:space="preserve">
-    <value>Duas ou mais instruções têm a mesma ordem.</value>
-  </data>
-  <data name="RECIPE_NOT_FOUND" xml:space="preserve">
-    <value>Receita não encontrada.</value>
-  </data>
-  <data name="INVALID_NUMBER_INGREDIENTS" xml:space="preserve">
-    <value>Número de ingredientes inválido.</value>
-  </data>
-  <data name="DUPLICATE_INGREDIENT_IN_LIST" xml:space="preserve">
-    <value>Há Ingredientes duplicados na lista.</value>
-  </data>
-  <data name="INGREDIENT_NOT_FOLLOWING_PATTERN" xml:space="preserve">
-    <value>Ingrediente não segue o padrão</value>
+  <data name="INGREDIENTS_PROVIDED_LEAD_IN" xml:space="preserve">
+    <value>Aqui estão os ingredientes que tenho:</value>
   </data>
 </root>

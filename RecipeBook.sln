@@ -15,9 +15,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.API", "src\Backe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Application", "src\Backend\RecipeBook.Application\RecipeBook.Application.csproj", "{926717C6-150F-4E82-9B06-B991D9E025C4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Domain", "src\backend\RecipeBook.Domain\RecipeBook.Domain.csproj", "{DEA9E709-DF06-4622-AA10-98FBA99C40BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Domain", "src\Backend\RecipeBook.Domain\RecipeBook.Domain.csproj", "{DEA9E709-DF06-4622-AA10-98FBA99C40BC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Infrastructure", "src\backend\RecipeBook.Infrastructure\RecipeBook.Infrastructure.csproj", "{A310B788-B36C-4C11-8FD5-E658C32BCB23}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Infrastructure", "src\Backend\RecipeBook.Infrastructure\RecipeBook.Infrastructure.csproj", "{A310B788-B36C-4C11-8FD5-E658C32BCB23}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RecipeBook.Communication", "src\Shared\RecipeBook.Communiction\RecipeBook.Communication.csproj", "{3FE2AEB0-43BD-4407-A134-229C9FA3F70C}"
 EndProject

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Mscc.GenerativeAI;
 using RecipeBook.Application.Cryptography;
 using RecipeBook.Domain.Cryptography;
 using RecipeBook.Domain.Repositories;
@@ -9,11 +10,13 @@ using RecipeBook.Domain.Repositories.Recipe;
 using RecipeBook.Domain.Repositories.User;
 using RecipeBook.Domain.Security.Tokens;
 using RecipeBook.Domain.Services.LoggedUser;
+using RecipeBook.Domain.Services.OpenAI;
 using RecipeBook.Infrastructure.DataAccess;
 using RecipeBook.Infrastructure.DataAccess.Repositories;
 using RecipeBook.Infrastructure.Extensions;
 using RecipeBook.Infrastructure.Security.Tokens.Access.Generator;
 using RecipeBook.Infrastructure.Security.Tokens.Access.Validator;
+using RecipeBook.Infrastructure.Services.Google;
 using RecipeBook.Infrastructure.Services.LoggedUser;
 using System.Reflection;
 
@@ -32,6 +35,7 @@ namespace RecipeBook.Infrastructure
 
             AddDbContext(services, configuration);
             AddFluentMigrator(services, configuration);
+            AddGoogleGemini(services, configuration);
         }
 
         private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
@@ -82,5 +86,16 @@ namespace RecipeBook.Infrastructure
         }
 
         private static void AddLoggedUser(IServiceCollection services) => services.AddScoped<ILoggedUser, LoggedUser>();
+
+        private static void AddGoogleGemini(IServiceCollection services, IConfiguration configuration)
+        {
+            services.AddScoped<IGenerateRecipeAI, GeminiService>();
+
+            string key = configuration.GetSection("Settings:Google:GeminiApiToken").Value ?? throw new Exception("Api Token not configurated");
+
+            services.AddScoped<IGenerativeAI>(options => new GoogleAI(apiKey: key));
+            //GoogleAI googleIA = new(apiKey: key);
+            //var sla = googleIA.GenerativeModel(model: Model.Gemini25FlashPreview0417);
+        }
     }
 }

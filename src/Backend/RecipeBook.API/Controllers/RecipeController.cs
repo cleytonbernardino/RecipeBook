@@ -3,6 +3,7 @@ using RecipeBook.API.Attributes;
 using RecipeBook.API.Binders;
 using RecipeBook.Application.UserCases.Recipe.Delete;
 using RecipeBook.Application.UserCases.Recipe.Filter;
+using RecipeBook.Application.UserCases.Recipe.Generate;
 using RecipeBook.Application.UserCases.Recipe.GetById;
 using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Application.UserCases.Recipe.Update;
@@ -76,6 +77,17 @@ namespace RecipeBook.API.Controllers
             await useCase.Execute(id);
 
             return NoContent();
+        }
+
+        [HttpPost("generate")]
+        [ProducesResponseType(typeof(ResponseGeneratedRecipeJson), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Generate(
+            [FromServices] IGenerateRecipeUseCase useCase,
+            [FromBody] RequestGenerateRecipeJson request)
+        {
+            var response = await useCase.Execute(request);
+            return Ok(response);
         }
     }
 }

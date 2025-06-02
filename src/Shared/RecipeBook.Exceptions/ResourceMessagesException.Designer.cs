@@ -88,6 +88,15 @@ namespace RecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a There are duplicate Ingredients in the list..
+        /// </summary>
+        public static string DUPLICATE_INGREDIENT_IN_LIST {
+            get {
+                return ResourceManager.GetString("DUPLICATE_INGREDIENT_IN_LIST", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Email cannot be empty..
         /// </summary>
         public static string EMAIL_EMPTY {
@@ -142,6 +151,15 @@ namespace RecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Ingredient not following pattern..
+        /// </summary>
+        public static string INGREDIENT_NOT_FOLLOWING_PATTERN {
+            get {
+                return ResourceManager.GetString("INGREDIENT_NOT_FOLLOWING_PATTERN", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Empty instruction..
         /// </summary>
         public static string INSTRUCTION_EMPTY {
@@ -156,6 +174,15 @@ namespace RecipeBook.Exceptions {
         public static string INSTRUCTION_EXCEEDS_MAXIMUM_SIZE {
             get {
                 return ResourceManager.GetString("INSTRUCTION_EXCEEDS_MAXIMUM_SIZE", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Invalid number of ingredients..
+        /// </summary>
+        public static string INVALID_NUMBER_INGREDIENTS {
+            get {
+                return ResourceManager.GetString("INVALID_NUMBER_INGREDIENTS", resourceCulture);
             }
         }
         

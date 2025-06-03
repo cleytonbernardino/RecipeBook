@@ -8,13 +8,13 @@ using WebApi.Test.InlineData;
 
 namespace WebApi.Test.Recipe.Filter
 {
-    public class FilterRecipeInvalidToken : RecipeBookClassFixture
+    public class GenerateRecipeInvalidToken : RecipeBookClassFixture
     {
         private const string METHOD = "recipe/filter";
 
         private readonly Guid _userIndentifier;
 
-        public FilterRecipeInvalidToken(CustomWebApplicationFactory factory) : base(factory)
+        public GenerateRecipeInvalidToken(CustomWebApplicationFactory factory) : base(factory)
         {
             _userIndentifier = factory.GetUserIndentifier();
         }

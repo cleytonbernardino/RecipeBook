@@ -89,13 +89,11 @@ namespace RecipeBook.Infrastructure
 
         private static void AddGoogleGemini(IServiceCollection services, IConfiguration configuration)
         {
-            services.AddScoped<IGenerateRecipeAI, GeminiService>();
+            services.AddScoped<IGenerateRecipeAI, GenerateRecipeAI>();
 
-            string key = configuration.GetSection("Settings:Google:GeminiApiToken").Value ?? throw new Exception("Api Token not configurated");
+            string key = configuration.GetSection("Settings:Google:GeminiApiToken").Value!;
 
             services.AddScoped<IGenerativeAI>(options => new GoogleAI(apiKey: key));
-            //GoogleAI googleIA = new(apiKey: key);
-            //var sla = googleIA.GenerativeModel(model: Model.Gemini25FlashPreview0417);
         }
     }
 }

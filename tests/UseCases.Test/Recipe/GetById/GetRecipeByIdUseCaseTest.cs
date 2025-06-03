@@ -12,7 +12,7 @@ namespace UseCases.Test.Recipe.GetById
     public class GetRecipeByIdUseCaseTest
     {
         [Fact]
-        public async void Success()
+        public async Task Success()
         {
             var user = UserBuilder.Build().user;
             var recipe = RecipeBuilder.Build(user);
@@ -26,7 +26,7 @@ namespace UseCases.Test.Recipe.GetById
         }
 
         [Fact]
-        public async void Error_Recipe_Not_Found()
+        public async Task Error_Recipe_Not_Found()
         {
             var user = UserBuilder.Build().user;
             var recipe = RecipeBuilder.Build(user);

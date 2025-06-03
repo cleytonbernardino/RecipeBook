@@ -5,11 +5,11 @@ using RecipeBook.Domain.Services.OpenAI;
 
 namespace RecipeBook.Infrastructure.Services.Google;
 
-public class GeminiService : IGenerateRecipeAI
+public class GenerateRecipeAI : IGenerateRecipeAI
 {
     private readonly IGenerativeAI _generativeAI;
 
-    public GeminiService(IGenerativeAI generativeAI)
+    public GenerateRecipeAI(IGenerativeAI generativeAI)
     {
         _generativeAI = generativeAI;
     }
@@ -25,11 +25,11 @@ public class GeminiService : IGenerateRecipeAI
 
         await chat.SendMessage(prompt);
 
-        var result = chat.Last.Text;
+        var result = chat.Last!.Text;
 
         var recipeItems = result
             .Split("\n")
-            .Where(item => string.IsNullOrWhiteSpace(item) == false)
+            .Where(item => !string.IsNullOrWhiteSpace(item))
             .Select(item => item.Replace("[", "").Replace("]", ""))
             .ToList();
 

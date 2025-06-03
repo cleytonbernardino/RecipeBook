@@ -2,6 +2,6 @@
 {
     public abstract class RecipeBookRuleConstants
     {
-        public const int MAXIMUM_INGREDIENTS_GENERATE_RECIPE = 5;
+        public const int MAXIMUM_INGREDIENTS_GENERATE_RECIPE = 6;
     }
 }

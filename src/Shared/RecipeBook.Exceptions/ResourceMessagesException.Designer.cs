@@ -232,6 +232,15 @@ namespace RecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Only images in the format (PNG, JPG, JPEG) are accepted..
+        /// </summary>
+        public static string ONLY_IMAGES_ACCEPTED {
+            get {
+                return ResourceManager.GetString("ONLY_IMAGES_ACCEPTED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Password different from current password..
         /// </summary>
         public static string PASSWORD_DIFFERENT_FROM_CURRENT_PASSWORD {

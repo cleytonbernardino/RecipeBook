@@ -11,5 +11,6 @@ namespace RecipeBook.Communication.Responses
         public IList<ResponseIngredientsJson> Ingredients { get; set; } = [];
         public IList<ResponseInstructionJson> Instructions { get; set; } = [];
         public IList<DishType> DishTypes { get; set; } = [];
+        public string? ImageUrl { get; set; } = null;
     }
 }

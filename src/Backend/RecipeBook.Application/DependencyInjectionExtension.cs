@@ -7,7 +7,6 @@ using RecipeBook.Application.UserCases.Recipe.Delete;
 using RecipeBook.Application.UserCases.Recipe.Filter;
 using RecipeBook.Application.UserCases.Recipe.Generate;
 using RecipeBook.Application.UserCases.Recipe.GetById;
-using RecipeBook.Application.UserCases.Recipe.Image;
 using RecipeBook.Application.UserCases.Recipe.Image.GetImage;
 using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Application.UserCases.Recipe.Update;

@@ -8,7 +8,7 @@ using RecipeBook.Domain.Services.Storage;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 
-namespace RecipeBook.Application.UserCases.Recipe.Image;
+namespace RecipeBook.Application.UserCases.Recipe.Image.GetImage;
 
 public class AddUpdateImageCoverUseCase : IAddUpdateImageCoverUseCase
 {

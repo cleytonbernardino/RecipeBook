@@ -31,12 +31,22 @@ internal class LocalStorageService : IBlobStorageService
         }
     }
 
-    public async Task<string> GetImageUrl(User user, string fileName)
+    public Task<string> GetImageUrl(User user, string fileName)
     {
         string imageFile = Path.Combine(_image_dir_root, user.UserIdentifier.ToString(), fileName);
         if (!File.Exists(imageFile))
-            return string.Empty;
+            return Task.FromResult(string.Empty);
 
-        return $"image/{user.UserIdentifier}/{fileName}";
+        return Task.FromResult($"image/{user.UserIdentifier}/{fileName}");
+    }
+
+    public Task Delete(User user, string fileName)
+    {
+        string imageFile = Path.Combine(_image_dir_root, user.UserIdentifier.ToString(), fileName);
+        if (File.Exists(imageFile))
+        {
+            File.Delete(imageFile);
+        }
+        return Task.CompletedTask;
     }
 }

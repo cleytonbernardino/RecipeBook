@@ -1,6 +1,5 @@
-﻿using FileTypeChecker.Extensions;
-using FileTypeChecker.Types;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
+using RecipeBook.Application.Extensions;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.Recipe;
 using RecipeBook.Domain.Services.LoggedUser;
@@ -38,25 +37,23 @@ public class AddUpdateImageCoverUseCase : IAddUpdateImageCoverUseCase
         if (recipe == null)
             throw new NotFoundException(ResourceMessagesException.RECIPE_NOT_FOUND);
 
-        var fileStream = file.OpenReadStream();
-
-        if ( !fileStream.Is<PortableNetworkGraphic>() 
-            && !fileStream.Is<JointPhotographicExpertsGroup>())
-            throw new ErrorOnValidationException([ResourceMessagesException.ONLY_IMAGES_ACCEPTED]);
-
-        if (string.IsNullOrEmpty(recipe.ImageIndentifier))
+        using (var fileStream = file.OpenReadStream())
         {
-            recipe.ImageIndentifier = $"{Guid.NewGuid()}{Path.GetExtension(file.FileName)}";
+            (bool isValidImage, string extension) = fileStream.ValideAndGetImageExtension();
 
-            _repository.Update(recipe);
+            if ( !isValidImage )
+                throw new ErrorOnValidationException([ResourceMessagesException.ONLY_IMAGES_ACCEPTED]);
 
-            await _unitOfWork.Commit();
+            if(string.IsNullOrEmpty(recipe.ImageIndentifier))
+            {
+                recipe.ImageIndentifier = $"{Guid.NewGuid()}{extension}";
+
+                _repository.Update(recipe);
+
+                await _unitOfWork.Commit();
+            }
+
+            await _blobStorageService.Upload(loggedUser, fileStream, recipe.ImageIndentifier);
         }
-
-        fileStream.Position = 0;
-
-        await _blobStorageService.Upload(loggedUser, fileStream, recipe.ImageIndentifier);
-
-        fileStream.Close();
     }
 }

@@ -20,7 +20,7 @@ public class RecipeController : RecipeBookBaseController
     [ProducesResponseType(typeof(ResponseRegisteredRecipeJson), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> Register(
-        [FromBody] RequestRecipeJson request,
+        [FromForm] RequestRegisterRecipeFormData request,
         [FromServices] IRecipeUseCase useCase)
     {
         var response = await useCase.Execute(request);

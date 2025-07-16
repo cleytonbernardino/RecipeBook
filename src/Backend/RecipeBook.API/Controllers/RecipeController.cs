@@ -6,6 +6,7 @@ using RecipeBook.Application.UserCases.Recipe.Filter;
 using RecipeBook.Application.UserCases.Recipe.Generate;
 using RecipeBook.Application.UserCases.Recipe.GetById;
 using RecipeBook.Application.UserCases.Recipe.Image;
+using RecipeBook.Application.UserCases.Recipe.Image.GetImage;
 using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Application.UserCases.Recipe.Update;
 using RecipeBook.Communication.Requests;
@@ -102,5 +103,18 @@ public class RecipeController : RecipeBookBaseController
     {
         await useCase.Execute(id, file);
         return NoContent();
+    }
+
+    [HttpGet("image/{userIndentifier}/{imageName}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(ResponseErrorJson), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetImage(
+        [FromServices] IGetLocalImageUseCase useCase,
+        string userIndentifier, string imageName
+        )
+    {
+        string imageFullDir = await useCase.Execute(userIndentifier, imageName);
+        string imageFormat = imageName.Split(".")[1];
+        return PhysicalFile(imageFullDir, $"image/{imageFormat}", $"RecipeImage.{imageFormat}");
     }
 }

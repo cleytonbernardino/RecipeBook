@@ -8,6 +8,7 @@ using RecipeBook.Application.UserCases.Recipe.Filter;
 using RecipeBook.Application.UserCases.Recipe.Generate;
 using RecipeBook.Application.UserCases.Recipe.GetById;
 using RecipeBook.Application.UserCases.Recipe.Image;
+using RecipeBook.Application.UserCases.Recipe.Image.GetImage;
 using RecipeBook.Application.UserCases.Recipe.Register;
 using RecipeBook.Application.UserCases.Recipe.Update;
 using RecipeBook.Application.UserCases.User.ChangePassword;
@@ -62,6 +63,7 @@ namespace RecipeBook.Application
             services.AddScoped<IDashboardUseCase, DashboardUseCase>();
             services.AddScoped<IGenerateRecipeUseCase, GenerateRecipeUseCase>();
             services.AddScoped<IAddUpdateImageCoverUseCase, AddUpdateImageCoverUseCase>();
+            services.AddScoped<IGetLocalImageUseCase, GetLocalImageUseCase>();
         }
     }
 }

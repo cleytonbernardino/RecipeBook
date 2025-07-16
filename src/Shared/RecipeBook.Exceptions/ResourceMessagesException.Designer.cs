@@ -142,6 +142,15 @@ namespace RecipeBook.Exceptions {
         }
         
         /// <summary>
+        ///   Consulta uma cadeia de caracteres localizada semelhante a Image cannot be found..
+        /// </summary>
+        public static string IMAGE_CANNOT_BE_FOUND {
+            get {
+                return ResourceManager.GetString("IMAGE_CANNOT_BE_FOUND", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Consulta uma cadeia de caracteres localizada semelhante a Ingredient empty..
         /// </summary>
         public static string INGREDIENT_EMPTY {

@@ -201,4 +201,7 @@
   <data name="ONLY_IMAGES_ACCEPTED" xml:space="preserve">
     <value>Sólo se aceptan imágenes en formato (PNG, JPG, JPEG).</value>
   </data>
+  <data name="IMAGE_CANNOT_BE_FOUND" xml:space="preserve">
+    <value>La imagen no se puede encontrar.</value>
+  </data>
 </root>

@@ -30,4 +30,13 @@ internal class LocalStorageService : IBlobStorageService
             await file.CopyToAsync(fileStream);
         }
     }
+
+    public async Task<string> GetImageUrl(User user, string fileName)
+    {
+        string imageFile = Path.Combine(_image_dir_root, user.UserIdentifier.ToString(), fileName);
+        if (!File.Exists(imageFile))
+            return string.Empty;
+
+        return $"image/{user.UserIdentifier}/{fileName}";
+    }
 }

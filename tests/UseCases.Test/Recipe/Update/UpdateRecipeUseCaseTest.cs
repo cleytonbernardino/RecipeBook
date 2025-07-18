@@ -8,66 +8,65 @@ using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 using Shouldly;
 
-namespace UseCases.Test.Recipe.Update
+namespace UseCases.Test.Recipe.Update;
+
+public class UpdateRecipeUseCaseTest
 {
-    public class UpdateRecipeUseCaseTest
+    [Fact]
+    public async Task Success()
     {
-        [Fact]
-        public async Task Success()
-        {
-            var user = UserBuilder.Build().user;
+        var user = UserBuilder.Build().user;
 
-            var recipe = RecipeBuilder.Build(user);
+        var recipe = RecipeBuilder.Build(user);
 
-            var request = RequestRecipeJsonBuilder.Build();
+        var request = RequestRecipeJsonBuilder.Build();
 
-            var useCase = CreateUseCase(user, recipe);
-            async Task act() => await useCase.Execute(recipe.ID, request);
+        var useCase = CreateUseCase(user, recipe);
+        async Task act() => await useCase.Execute(recipe.ID, request);
 
-            await act().ShouldNotThrowAsync();
-        }
+        await act().ShouldNotThrowAsync();
+    }
 
-        [Fact]
-        public async Task Error_Recipe_Not_Found()
-        {
-            var user = UserBuilder.Build().user;
+    [Fact]
+    public async Task Error_Recipe_Not_Found()
+    {
+        var user = UserBuilder.Build().user;
 
-            var request = RequestRecipeJsonBuilder.Build();
+        var request = RequestRecipeJsonBuilder.Build();
 
-            var useCase = CreateUseCase(user);
-            async Task act() => await useCase.Execute(1000, request);
+        var useCase = CreateUseCase(user);
+        async Task act() => await useCase.Execute(1000, request);
 
-            var exception = await act().ShouldThrowAsync<NotFoundException>();
-            exception.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
-        }
+        var exception = await act().ShouldThrowAsync<NotFoundException>();
+        exception.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
+    }
 
-        [Fact]
-        public async Task Error_Title_Empty()
-        {
-            var user = UserBuilder.Build().user;
+    [Fact]
+    public async Task Error_Title_Empty()
+    {
+        var user = UserBuilder.Build().user;
 
-            var recipe = RecipeBuilder.Build(user);
+        var recipe = RecipeBuilder.Build(user);
 
-            var request = RequestRecipeJsonBuilder.Build();
-            request.Title = "";
+        var request = RequestRecipeJsonBuilder.Build();
+        request.Title = "";
 
-            var useCase = CreateUseCase(user, recipe);
-            async Task act() => await useCase.Execute(recipe.ID, request);
+        var useCase = CreateUseCase(user, recipe);
+        async Task act() => await useCase.Execute(recipe.ID, request);
 
-            var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
-            exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.TITLE_EMPTY);
-        }
+        var exception = await act().ShouldThrowAsync<ErrorOnValidationException>();
+        exception.ErrorMessagens.ShouldHaveSingleItem().ShouldBe(ResourceMessagesException.TITLE_EMPTY);
+    }
 
-        private static UpdateRecipeUseCase CreateUseCase(
-            RecipeBook.Domain.Entities.User user, 
-            RecipeBook.Domain.Entities.Recipe? recipe = null)
-        {
-            var loggedUser = LoggedUserBuilder.Build(user);
-            var repository = new RecipeUpdateOnlyRepositoryBuilder().GetById(user, recipe).Build();
-            var mapper = MapperBuilder.Build();
-            var unitOfWork = UnitOfWorkBuilder.Build();
+    private static UpdateRecipeUseCase CreateUseCase(
+        RecipeBook.Domain.Entities.User user, 
+        RecipeBook.Domain.Entities.Recipe? recipe = null)
+    {
+        var loggedUser = LoggedUserBuilder.Build(user);
+        var repository = new RecipeUpdateOnlyRepositoryBuilder().GetById(user, recipe).Build();
+        var mapper = MapperBuilder.Build();
+        var unitOfWork = UnitOfWorkBuilder.Build();
 
-            return new UpdateRecipeUseCase(loggedUser, repository, mapper, unitOfWork);
-        }
+        return new UpdateRecipeUseCase(loggedUser, repository, mapper, unitOfWork);
     }
 }

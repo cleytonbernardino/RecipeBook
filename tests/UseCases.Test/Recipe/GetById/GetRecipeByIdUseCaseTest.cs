@@ -1,4 +1,5 @@
-﻿using CommonTestUtilities.Entities;
+﻿using CommonTestUtilities.BlobStorage;
+using CommonTestUtilities.Entities;
 using CommonTestUtilities.LoggedUser;
 using CommonTestUtilities.Mapper;
 using CommonTestUtilities.Repositories;
@@ -7,48 +8,47 @@ using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 using Shouldly;
 
-namespace UseCases.Test.Recipe.GetById
+namespace UseCases.Test.Recipe.GetById;
+
+public class GetRecipeByIdUseCaseTest
 {
-    public class GetRecipeByIdUseCaseTest
+    [Fact]
+    public async Task Success()
     {
-        [Fact]
-        public async Task Success()
-        {
-            var user = UserBuilder.Build().user;
-            var recipe = RecipeBuilder.Build(user);
+        var user = UserBuilder.Build().user;
+        var recipe = RecipeBuilder.Build(user);
 
-            var useCase = CreateUseCase(user, recipe);
-            var result = await useCase.Execute(recipe.ID);
+        var useCase = CreateUseCase(user, recipe);
+        var result = await useCase.Execute(recipe.ID);
 
-            result.ShouldNotBeNull();
-            result.Id.ShouldNotBeNullOrEmpty();
-            result.Title.ShouldBe(recipe.Title);
-        }
+        result.ShouldNotBeNull();
+        result.Id.ShouldNotBeNullOrEmpty();
+        result.Title.ShouldBe(recipe.Title);
+        result.ImageUrl.ShouldNotBeNullOrEmpty();
+    }
 
-        [Fact]
-        public async Task Error_Recipe_Not_Found()
-        {
-            var user = UserBuilder.Build().user;
-            var recipe = RecipeBuilder.Build(user);
+    [Fact]
+    public async Task Error_Recipe_Not_Found()
+    {
+        var user = UserBuilder.Build().user;
+        var recipe = RecipeBuilder.Build(user);
 
-            var useCase = CreateUseCase(user, recipe);
-            async Task act() { await useCase.Execute(recipe.ID + 1); }
+        var useCase = CreateUseCase(user, recipe);
+        async Task act() { await useCase.Execute(recipe.ID + 1); }
 
-            var exeption = await act().ShouldThrowAsync<NotFoundException>();
-            exeption.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
-        }
+        var exeption = await act().ShouldThrowAsync<NotFoundException>();
+        exeption.Message.ShouldBe(ResourceMessagesException.RECIPE_NOT_FOUND);
+    }
 
-        private static GetRecipeByIdUseCase CreateUseCase(
-            RecipeBook.Domain.Entities.User user,
-            RecipeBook.Domain.Entities.Recipe? recipe = null)
-        {
-            var loggedUser = LoggedUserBuilder.Build(user);
+    private static GetRecipeByIdUseCase CreateUseCase(
+        RecipeBook.Domain.Entities.User user,
+        RecipeBook.Domain.Entities.Recipe? recipe = null)
+    {
+        var loggedUser = LoggedUserBuilder.Build(user);
+        var repository = new RecipeReadOnlyRepositoryBuilder().GetById(user, recipe).Build();
+        var mapper = MapperBuilder.Build();
+        var blobStorage = new BlobStorageServiceBuilder().GetImageUrl(user, recipe?.ImageIndentifier).Build();
 
-            var repository = new RecipeReadOnlyRepositoryBuilder().GetById(user, recipe).Build();
-
-            var mapper = MapperBuilder.Build();
-
-            return new GetRecipeByIdUseCase(loggedUser, repository, mapper);
-        }
+        return new GetRecipeByIdUseCase(loggedUser, repository, mapper, blobStorage);
     }
 }

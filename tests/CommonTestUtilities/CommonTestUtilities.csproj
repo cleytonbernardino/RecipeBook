@@ -17,4 +17,16 @@
     <ProjectReference Include="..\..\src\Shared\RecipeBook.Communiction\RecipeBook.Communication.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Files\FileJpg.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\FilePng.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Files\FileTxt.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

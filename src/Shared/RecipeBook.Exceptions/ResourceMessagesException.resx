@@ -198,4 +198,10 @@
   <data name="INGREDIENT_NOT_FOLLOWING_PATTERN" xml:space="preserve">
     <value>Ingredient not following pattern.</value>
   </data>
+  <data name="ONLY_IMAGES_ACCEPTED" xml:space="preserve">
+    <value>Only images in the format (PNG, JPG, JPEG) are accepted.</value>
+  </data>
+  <data name="IMAGE_CANNOT_BE_FOUND" xml:space="preserve">
+    <value>Image cannot be found.</value>
+  </data>
 </root>

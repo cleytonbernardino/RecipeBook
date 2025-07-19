@@ -1,9 +1,12 @@
 ﻿using AutoMapper;
+using RecipeBook.Application.Extensions;
 using RecipeBook.Communication.Requests;
 using RecipeBook.Communication.Responses;
 using RecipeBook.Domain.Repositories;
 using RecipeBook.Domain.Repositories.Recipe;
 using RecipeBook.Domain.Services.LoggedUser;
+using RecipeBook.Domain.Services.Storage;
+using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
 
 namespace RecipeBook.Application.UserCases.Recipe.Register
@@ -13,22 +16,25 @@ namespace RecipeBook.Application.UserCases.Recipe.Register
         private readonly ILoggedUser _loggedUser;
         private readonly IMapper _mapper;
         private readonly IRecipeWriteOnlyRepository _repository;
+        private readonly IBlobStorageService _blobStorageService;
         private readonly IUnitOfWork _unitOfWork;
 
         public RecipeUseCase(
             ILoggedUser loggedUser,
             IMapper mapper,
             IRecipeWriteOnlyRepository repository,
+            IBlobStorageService blobStorageService,
             IUnitOfWork unitOfWork
         )
         {
             _loggedUser = loggedUser;
             _mapper = mapper;
             _repository = repository;
+            _blobStorageService = blobStorageService;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ResponseRegisteredRecipeJson> Execute(RequestRecipeJson request)
+        public async Task<ResponseRegisteredRecipeJson> Execute(RequestRegisterRecipeFormData request)
         {
             Validator(request);
 
@@ -43,6 +49,20 @@ namespace RecipeBook.Application.UserCases.Recipe.Register
                 instructions[index].Step = index + 1;
             }
             recipe.Instructions = _mapper.Map<IList<Domain.Entities.Instruction>>(instructions);
+
+            if (request.Image is not null)
+            {
+                using (var fileStream = request.Image.OpenReadStream())
+                {
+                    (bool isValidImage, string extension) = fileStream.ValideAndGetImageExtension();
+
+                    if ( !isValidImage)
+                        throw new ErrorOnValidationException([ResourceMessagesException.ONLY_IMAGES_ACCEPTED]);
+
+                    recipe.ImageIndentifier = $"{Guid.NewGuid()}{extension}";
+                    await _blobStorageService.Upload(loggedUser, fileStream, recipe.ImageIndentifier);
+                }
+            }
 
             await _repository.Add(recipe);
             await _unitOfWork.Commit();

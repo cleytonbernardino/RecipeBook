@@ -22,11 +22,11 @@ namespace WebApi.Test.Recipe.Register
         [Fact]
         public async Task Success()
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token);
+            var response = await DoPostFormData(METHOD, request, token);
             response.StatusCode.ShouldBe(HttpStatusCode.Created);
         }
 
@@ -34,12 +34,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Empty_Name(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Title = "";
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -53,12 +53,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Cooking_Time_Out_Range(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.CookingTime = (CookingTime)1000;
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -72,12 +72,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Difficulty_Out_Range(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Difficulty = (Difficulty)1000;
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -91,12 +91,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Ingredients_Cannot_Be_Empty(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Ingredients.Clear();
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -110,12 +110,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Ingredients_Invalid_Type(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Ingredients[0] = "";
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -129,12 +129,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Instructions_Cannot_Be_Empty(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Instructions.Clear();
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -148,12 +148,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Same_Instructions(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Instructions.First().Step = request.Instructions.Last().Step;
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -167,12 +167,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_Negative_Step_Instructions(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.Instructions[0].Step = -1;
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);
@@ -186,12 +186,12 @@ namespace WebApi.Test.Recipe.Register
         [ClassData(typeof(CultureInlineDataTest))]
         public async Task Error_DishTypes_Out_Range(string culture)
         {
-            var request = RequestRecipeJsonBuilder.Build();
+            var request = RequestRegisterRecipeFormDataBuilder.Build();
             request.DishTypes.Add((DishType)1000);
 
             string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPost(METHOD, request, token, culture);
+            var response = await DoPostFormData(METHOD, request, token, culture);
             response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
             var errors = await GetErrorList(response);

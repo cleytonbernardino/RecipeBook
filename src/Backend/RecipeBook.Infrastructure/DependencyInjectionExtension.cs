@@ -108,7 +108,8 @@ public static class DependencyInjectionExtension
     {
         string connectionString = configuration.GetSection("Settings:Blob:Azure").Value!;
 
-        services.AddScoped<IBlobStorageService>(c => new AzureStorageService(new BlobServiceClient(connectionString)));
+        if ( !string.IsNullOrEmpty(connectionString) )
+            services.AddScoped<IBlobStorageService>(c => new AzureStorageService(new BlobServiceClient(connectionString)));
     }
 
     private static void AddLocalBlobService(IServiceCollection services, IConfiguration configuration)

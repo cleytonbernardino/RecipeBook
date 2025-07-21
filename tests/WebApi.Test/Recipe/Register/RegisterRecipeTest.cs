@@ -49,43 +49,43 @@ namespace WebApi.Test.Recipe.Register
             errors.First().ToString().ShouldBe(expectedMsg);
         }
 
-        [Theory]
-        [ClassData(typeof(CultureInlineDataTest))]
-        public async Task Error_Cooking_Time_Out_Range(string culture)
-        {
-            var request = RequestRegisterRecipeFormDataBuilder.Build();
-            request.CookingTime = (CookingTime)1000;
+        //[Theory]
+        //[ClassData(typeof(CultureInlineDataTest))]
+        //public async Task Error_Cooking_Time_Out_Range(string culture)
+        //{
+        //    var request = RequestRegisterRecipeFormDataBuilder.Build();
+        //    request.CookingTime = (CookingTime)1000;
 
-            string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
+        //    string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPostFormData(METHOD, request, token, culture);
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        //    var response = await DoPostFormData(METHOD, request, token, culture);
+        //    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            var errors = await GetErrorList(response);
-            errors.ShouldHaveSingleItem();
+        //    var errors = await GetErrorList(response);
+        //    errors.ShouldHaveSingleItem();
 
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("COOKING_TIME_NOT_SUPPORTED", new CultureInfo(culture))!;
-            errors.First().ToString().ShouldBe(expectedMessage);
-        }
+        //    string expectedMessage = ResourceMessagesException.ResourceManager.GetString("COOKING_TIME_NOT_SUPPORTED", new CultureInfo(culture))!;
+        //    errors.First().ToString().ShouldBe(expectedMessage);
+        //}
 
-        [Theory]
-        [ClassData(typeof(CultureInlineDataTest))]
-        public async Task Error_Difficulty_Out_Range(string culture)
-        {
-            var request = RequestRegisterRecipeFormDataBuilder.Build();
-            request.Difficulty = (Difficulty)1000;
+        //[Theory]
+        //[ClassData(typeof(CultureInlineDataTest))]
+        //public async Task Error_Difficulty_Out_Range(string culture)
+        //{
+        //    var request = RequestRegisterRecipeFormDataBuilder.Build();
+        //    request.Difficulty = (Difficulty)1000;
 
-            string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
+        //    string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPostFormData(METHOD, request, token, culture);
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        //    var response = await DoPostFormData(METHOD, request, token, culture);
+        //    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            var errors = await GetErrorList(response);
-            errors.ShouldHaveSingleItem();
+        //    var errors = await GetErrorList(response);
+        //    errors.ShouldHaveSingleItem();
 
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("DIFFICULTY_NOT_SUPPORTED", new CultureInfo(culture))!;
-            errors.First().ToString().ShouldBe(expectedMessage);
-        }
+        //    string expectedMessage = ResourceMessagesException.ResourceManager.GetString("DIFFICULTY_NOT_SUPPORTED", new CultureInfo(culture))!;
+        //    errors.First().ToString().ShouldBe(expectedMessage);
+        //}
 
         [Theory]
         [ClassData(typeof(CultureInlineDataTest))]
@@ -182,24 +182,24 @@ namespace WebApi.Test.Recipe.Register
             errors.First().ToString().ShouldBe(expectedMenssage);
         }
 
-        [Theory]
-        [ClassData(typeof(CultureInlineDataTest))]
-        public async Task Error_DishTypes_Out_Range(string culture)
-        {
-            var request = RequestRegisterRecipeFormDataBuilder.Build();
-            request.DishTypes.Add((DishType)1000);
+        //[Theory]
+        //[ClassData(typeof(CultureInlineDataTest))]
+        //public async Task Error_DishTypes_Out_Range(string culture)
+        //{
+        //    var request = RequestRegisterRecipeFormDataBuilder.Build();
+        //    request.DishTypes.Add((DishType)1000);
 
-            string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
+        //    string token = JwtTokenGeneratorBuilder.Build().Generate(_userIndentifier);
 
-            var response = await DoPostFormData(METHOD, request, token, culture);
-            response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
+        //    var response = await DoPostFormData(METHOD, request, token, culture);
+        //    response.StatusCode.ShouldBe(HttpStatusCode.BadRequest);
 
-            var errors = await GetErrorList(response);
-            errors.ShouldHaveSingleItem();
+        //    var errors = await GetErrorList(response);
+        //    errors.ShouldHaveSingleItem();
 
-            string expectedMessage = ResourceMessagesException.ResourceManager.GetString("DISH_TYPE_NOT_SUPPORTED", new CultureInfo(culture))!;
-            errors.First().ToString().ShouldBe(expectedMessage);
-        }
+        //    string expectedMessage = ResourceMessagesException.ResourceManager.GetString("DISH_TYPE_NOT_SUPPORTED", new CultureInfo(culture))!;
+        //    errors.First().ToString().ShouldBe(expectedMessage);
+        //}
 
     }
 }

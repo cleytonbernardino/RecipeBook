@@ -1,6 +1,7 @@
 ﻿using RecipeBook.Domain.Services.LoggedUser;
 using RecipeBook.Exceptions;
 using RecipeBook.Exceptions.ExceptionsBase;
+using System.Text.RegularExpressions;
 
 namespace RecipeBook.Application.UserCases.Recipe.Image.GetImage;
 
@@ -21,10 +22,18 @@ public class GetLocalImageUseCase : IGetLocalImageUseCase
         if (user.UserIdentifier.ToString() != userIndetifier)
             throw new NotFoundException(ResourceMessagesException.IMAGE_CANNOT_BE_FOUND);
 
-        string imageDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToString(), "images");
-        string imageFile = Path.Combine(imageDir, userIndetifier, imageName);
-        if (!File.Exists(imageFile))
+        var regex = new Regex(@"^[a-zA-Z0-9\-\.]+$");
+        if (!regex.IsMatch(userIndetifier) || !regex.IsMatch(imageName))
             throw new NotFoundException(ResourceMessagesException.IMAGE_CANNOT_BE_FOUND);
+
+        string imageBaseDir = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory.ToString(), "images"));
+        string imageFile = Path.GetFullPath(Path.Combine(imageBaseDir, userIndetifier, imageName));
+
+        if (!imageFile.StartsWith(imageBaseDir))
+            throw new NotFoundException(ResourceMessagesException.IMAGE_CANNOT_BE_FOUND);
+        else if (!File.Exists(imageFile))
+            throw new NotFoundException(ResourceMessagesException.IMAGE_CANNOT_BE_FOUND);
+
         return imageFile;
     }
 }

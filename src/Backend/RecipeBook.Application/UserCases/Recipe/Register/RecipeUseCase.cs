@@ -70,7 +70,7 @@ namespace RecipeBook.Application.UserCases.Recipe.Register
             return _mapper.Map<ResponseRegisteredRecipeJson>(recipe);
         }
 
-        private static void Validator(RequestRecipeJson request)
+        private static void Validator(RequestRegisterRecipeFormData request)
         {
             RecipeValidator validator = new();
             var result = validator.Validate(request);

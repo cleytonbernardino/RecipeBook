@@ -112,7 +112,7 @@ public static class DependencyInjectionExtension
             services.AddScoped<IBlobStorageService>(c => new AzureStorageService(new BlobServiceClient(connectionString)));
     }
 
-    private static void AddLocalBlobService(IServiceCollection services, IConfiguration configuration)
+    private static void AddLocalBlobService(IServiceCollection services)
     {
         services.AddScoped<IBlobStorageService, LocalStorageService>();
     }

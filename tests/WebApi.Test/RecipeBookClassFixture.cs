@@ -93,7 +93,7 @@ public class RecipeBookClassFixture : IClassFixture<CustomWebApplicationFactory>
         _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
     }
 
-    private void AddListToMultpartContent(MultipartFormDataContent multipartFormDataContent, string propertyName, IList list)
+    private static void AddListToMultpartContent(MultipartFormDataContent multipartFormDataContent, string propertyName, IList list)
     {
         var itemType = list.GetType().GetGenericArguments().Single();
 

@@ -43,7 +43,7 @@ public static class DependencyInjectionExtension
         if (localBlob == "false")
             AddAzureStorageService(services, configuration);
         else
-            AddLocalBlobService(services, configuration);
+            AddLocalBlobService(services);
     }
 
     private static void AddDbContext(IServiceCollection services, IConfiguration configuration)
